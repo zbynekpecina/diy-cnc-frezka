@@ -44,7 +44,7 @@ Celá aplikace je **jeden HTML soubor bez frameworku**. Funguje offline, na mobi
 - kusovník s cenami, odkazy do obchodů a náhledy dílů
 - **výrobní výkresy a řezný plán** – délky jeklů a pásovin, úhel vzpěry, díry v plexiskle, adaptéru a pásovinách
 - **pracovní oblast** vyznačená laserem podle skutečného dosahu nástroje
-- varianty Custom a Custom2 a pět dalších konceptů pro srovnání
+- varianty Custom1 a Custom2 a pět dalších konceptů pro srovnání
 
 </td>
 </tr>
@@ -129,7 +129,9 @@ python tools/server.py                                # s přihlášením
 ```
 
 - stav v `data/state.json`, souběžné úpravy z více zařízení server sloučí
-- hesla jako PBKDF2-SHA256, podepsaná HttpOnly cookie, omezení počtu pokusů, kontrola Originu
+- hesla jako PBKDF2-SHA256 (min. 8 znaků), podepsaná HttpOnly cookie (`__Host-` přes HTTPS), omezení pokusů o přihlášení i zápisů
+- kontrola Originu a Sec-Fetch-Site u zápisů, hlavičky CSP, HSTS, X-Frame-Options, COOP/CORP a Permissions-Policy
+- `python tools/server.py --logout-all` zneplatní všechna přihlášení
 - za reverzní proxy (Cloudflare tunel, nginx) spouštět s `--trust-proxy`
 
 ### Docker
@@ -139,7 +141,7 @@ cp .env.example .env                 # nastav CNC_PASSWORD
 docker compose up -d --build         # http://localhost:8090
 ```
 
-Obraz sestaví web v build stage a běží jako neprivilegovaný uživatel. Stav a hash hesla jsou ve svazku `/data`.
+Obraz sestaví web v build stage a běží jako neprivilegovaný uživatel s read-only souborovým systémem, bez Linux capabilities a s `no-new-privileges`. Stav a hash hesla jsou ve svazku `/data`.
 
 ## Struktura
 

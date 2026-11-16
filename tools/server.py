@@ -20,7 +20,9 @@ Zabezpečení:
   - relace = podepsaná cookie (HMAC-SHA256, tajný klíč data/secret.key vzniká na serveru a nikam se nekopíruje),
     HttpOnly, SameSite=Lax, Secure přes HTTPS, platnost 30 dní; změna hesla zneplatní všechna přihlášení
   - ochrana proti hádání hesla: max 5 chybných pokusů / 15 min z jedné IP, max 30 / hod celkem, každý chybný pokus +1 s
-  - zápis (PUT/POST) jen se stejným Originem, bezpečnostní hlavičky, nic se neservíruje mimo web/
+  - zápis (PUT/POST) jen se stejným Originem / Sec-Fetch-Site, max. 120 zápisů za minutu z jedné IP
+  - hlavičky: CSP, HSTS, X-Frame-Options DENY, COOP/CORP, Permissions-Policy, nosniff; přes HTTPS cookie __Host-
+  - nic se neservíruje mimo web/ (ani skryté soubory)
   - bez data/auth.json server odmítne běžet (kromě --upstream nebo výslovného --no-auth)
   - IP pro omezení pokusů se bere z hlavičky CF-Connecting-IP / X-Forwarded-For jen s --trust-proxy
     (server za Cloudflare tunelem / reverzní proxy); jinak by si ji útočník mohl podvrhnout
@@ -29,6 +31,7 @@ Spuštění:
   python tools/server.py --set-password [--role viewer]   # nastavit heslo (uloží jen hash)
   python tools/server.py [--port 8090] [--host 0.0.0.0]   # s přihlášením
   python tools/server.py --no-auth                         # lokální vývoj bez hesla (jen 127.0.0.1)
+  python tools/server.py --logout-all                      # zneplatnit všechna přihlášení
   python tools/server.py --upstream http://server:8095     # celý web přeposílat na jiný server
                                                            # (jeden stav, jedno heslo)
 """
@@ -66,8 +69,15 @@ NO_AUTH = False
 TRUST_PROXY = False
 _MISSING = object()
 
-COOKIE = "cnc_s"
+COOKIE = "cnc_s"                     # přes HTTP (LAN)
+COOKIE_S = "__Host-cnc_s"            # přes HTTPS: prefix __Host- = jen Secure, Path=/, bez Domain
 SESSION_DAYS = 30
+WRITE_MAX, WRITE_WIN = 120, 60       # zápisy stavu z jedné IP za minutu
+WRITES = defaultdict(deque)
+# CSP pro aplikaci: vše inline v jednom HTML, písma z Google Fonts, obrázky jen vlastní nebo data:
+APP_CSP = ("default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; "
+           "font-src https://fonts.gstatic.com; img-src 'self' data: blob:; connect-src 'self'; media-src 'self' blob:; "
+           "object-src 'none'; base-uri 'none'; form-action 'self'; frame-ancestors 'none'")
 PBKDF2_ITER = 310_000
 IP_MAX, IP_WIN = 5, 15 * 60          # chybné pokusy z jedné IP za okno
 GLOBAL_MAX, GLOBAL_WIN = 30, 3600    # chybné pokusy celkem za hodinu
@@ -248,7 +258,7 @@ def write_state(state, base=None):
 
 # ---------------------------------------------------------------- HTTP
 class H(BaseHTTPRequestHandler):
-    server_version = "CNCFrezka/2.0"
+    server_version = "web"
     sys_version = ""
 
     def log_message(self, fmt, *args):
@@ -281,11 +291,14 @@ class H(BaseHTTPRequestHandler):
 
     def sec_headers(self):
         self.send_header("X-Content-Type-Options", "nosniff")
-        self.send_header("X-Frame-Options", "SAMEORIGIN")
+        self.send_header("X-Frame-Options", "DENY")
         self.send_header("Referrer-Policy", "same-origin")
         self.send_header("X-Robots-Tag", "noindex, nofollow")
+        self.send_header("Permissions-Policy", "camera=(), microphone=(), geolocation=(), payment=(), usb=(), interest-cohort=()")
+        self.send_header("Cross-Origin-Opener-Policy", "same-origin")
+        self.send_header("Cross-Origin-Resource-Policy", "same-origin")
         if self.https():
-            self.send_header("Strict-Transport-Security", "max-age=31536000")
+            self.send_header("Strict-Transport-Security", "max-age=31536000; includeSubDomains")
 
     def send_body(self, code, ctype, b, extra=()):
         self.send_response(code)
@@ -320,15 +333,33 @@ class H(BaseHTTPRequestHandler):
         return None
 
     def role(self):
-        return "admin" if NO_AUTH else session_role(self.cookie(COOKIE) or "")
+        if NO_AUTH:
+            return "admin"
+        return session_role(self.cookie(COOKIE_S) or "") or session_role(self.cookie(COOKIE) or "")
+
+    def session_cookie(self, value, max_age):
+        if self.https():
+            return f"{COOKIE_S}={value}; Path=/; Max-Age={max_age}; HttpOnly; Secure; SameSite=Lax"
+        return f"{COOKIE}={value}; Path=/; Max-Age={max_age}; HttpOnly; SameSite=Lax"
+
+    def write_throttled(self):
+        now, q = time.time(), WRITES[self.client_ip()]
+        with FLOCK:
+            while q and now - q[0] > WRITE_WIN:
+                q.popleft()
+            q.append(now)
+            if len(WRITES) > 5000:
+                for k in list(WRITES)[:1000]:
+                    WRITES.pop(k, None)
+            return len(q) > WRITE_MAX
 
     def authed(self):
         return self.role() is not None
 
     def same_origin(self):
         o = self.headers.get("Origin")
-        if not o:
-            return True                       # stejné-originové fetch/form v některých prohlížečích Origin neposílá; SameSite=Lax chrání cookie
+        if not o:                             # bez Originu: rozhodne Sec-Fetch-Site (moderní prohlížeče), jinak SameSite cookie
+            return (self.headers.get("Sec-Fetch-Site") or "same-origin") in ("same-origin", "none")
         hosts = {(self.headers.get(h) or "").lower() for h in ("Host", "X-Forwarded-Host")} - {""}
         return urlparse(o).netloc.lower() in hosts
 
@@ -384,7 +415,7 @@ class H(BaseHTTPRequestHandler):
                 return self.redirect(safe_next(parse_qs(u.query).get("next", ["/"])[0]))
             return self.login_page(nxt=safe_next(parse_qs(u.query).get("next", ["/"])[0]))
         if path == "/logout":
-            return self.redirect("/login", (("Set-Cookie", f"{COOKIE}=; Path=/; Max-Age=0; HttpOnly; SameSite=Lax"),))
+            return self.redirect("/login", (("Set-Cookie", self.session_cookie("", 0)), ("Set-Cookie", f"{COOKIE}=; Path=/; Max-Age=0; HttpOnly; SameSite=Lax")))
         if not self.authed():
             if path.startswith("/api/"):
                 return self._json(401, {"error": "login"})
@@ -406,7 +437,8 @@ class H(BaseHTTPRequestHandler):
         ctype = mimetypes.guess_type(str(f))[0] or "application/octet-stream"
         if ctype.startswith("text/") or ctype in ("application/javascript", "application/json"):
             ctype += "; charset=utf-8"
-        self.send_body(200, ctype, f.read_bytes(), (("Cache-Control", "private, no-cache" if f.suffix == ".html" else "private, max-age=3600"),))
+        extra = (("Cache-Control", "private, no-cache"), ("Content-Security-Policy", APP_CSP)) if f.suffix == ".html" else (("Cache-Control", "private, max-age=3600"),)
+        self.send_body(200, ctype, f.read_bytes(), extra)
 
     def do_login(self):
         ip = self.client_ip()
@@ -428,8 +460,7 @@ class H(BaseHTTPRequestHandler):
                     role = r
         if role:
             self.log_message("login OK (%s)", role)
-            flags = "; Secure" if self.https() else ""
-            return self.redirect(nxt, (("Set-Cookie", f"{COOKIE}={make_session(role)}; Path=/; Max-Age={SESSION_DAYS * 86400}; HttpOnly; SameSite=Lax{flags}"),))
+            return self.redirect(nxt, (("Set-Cookie", self.session_cookie(make_session(role), SESSION_DAYS * 86400)),))
         note_fail(ip)
         self.log_message("login CHYBA")
         time.sleep(1)
@@ -449,6 +480,8 @@ class H(BaseHTTPRequestHandler):
             return self._json(403, {"error": "jen prohlížení"})
         if not self.same_origin():
             return self._json(403, {"error": "origin"})
+        if self.write_throttled():
+            return self._json(429, {"error": "too many writes"})
         n = self.body_len()
         if n <= 0 or n > MAX_BODY:
             return self._json(413, {"error": "bad size"})
@@ -467,8 +500,8 @@ class H(BaseHTTPRequestHandler):
 
 
 def save_password(role, pw):
-    if len(pw) < 4:
-        sys.exit("Heslo musí mít aspoň 4 znaky.")
+    if len(pw) < 8:
+        sys.exit("Heslo musí mít aspoň 8 znaků (doporučeno 12+, ideálně víc slov).")
     DATA.mkdir(parents=True, exist_ok=True)
     try:
         cfg = json.loads(AUTH.read_text(encoding="utf-8"))
@@ -488,8 +521,18 @@ def main():
     ap.add_argument("--role", choices=("admin", "viewer"), default="admin", help="pro --set-password: admin (úpravy) / viewer (jen prohlížení)")
     ap.add_argument("--no-auth", action="store_true", help="bez přihlášení (jen pro lokální vývoj)")
     ap.add_argument("--trust-proxy", action="store_true", help="IP klienta brát z CF-Connecting-IP / X-Forwarded-For (jen za proxy)")
+    ap.add_argument("--logout-all", action="store_true", help="zneplatnit všechna přihlášení (nový klíč relací) a skončit")
     a = ap.parse_args()
     global UPSTREAM, NO_AUTH, TRUST_PROXY
+    if a.logout_all:
+        DATA.mkdir(parents=True, exist_ok=True)
+        SECRET.write_bytes(secrets.token_bytes(32))
+        try:
+            os.chmod(SECRET, 0o600)
+        except Exception:
+            pass
+        print("Nový klíč relací – všechna přihlášení jsou neplatná (po restartu serveru).")
+        return
     if a.set_password:
         pw = os.environ.get("CNC_PASSWORD") or getpass.getpass(f"Nové heslo ({a.role}): ")
         save_password(a.role, pw)

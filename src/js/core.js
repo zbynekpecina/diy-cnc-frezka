@@ -11,7 +11,7 @@ const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
 const md = s => (window.marked ? marked.parse(s, {mangle: false, headerIds: false}) : "<pre>" + esc(s) + "</pre>");
 
 const STORE = "cncfrezka.state.v1";
-const defState = () => ({theme: null, sel: {}, custom: [], budget: 40000, bom: {}, steps: {}, q: {}, notes: "", variant: "nas", bomMode: "need", navTab: "nas", bomV: 3, params: {}, designs: [], rates: {eur: 25, usd: 23}, kwh: 6});
+const defState = () => ({theme: null, sel: {}, custom: [], budget: 40000, bom: {}, steps: {}, q: {}, notes: "", variant: "nas2", bomMode: "need", navTab: "nas2", bomV: 3, params: {}, designs: [], rates: {eur: 25, usd: 23}, kwh: 6});
 let S;
 try { S = Object.assign(defState(), JSON.parse(localStorage.getItem(STORE) || "{}")); } catch (e) { S = defState(); }
 /* --- synchronizace se serverem (když běží přes tools/server.py) --- */
@@ -82,7 +82,11 @@ async function poll() {
     }
   } catch (e) { setSync("err"); }
 }
-function migrate() { if (S.bomV !== 3) { S.bom = {}; S.bomV = 3; S.variant = "nas"; S.navTab = "nas"; } S.params = S.params || {}; S.designs = S.designs || []; }
+function migrate() {
+  if (S.bomV !== 3) { S.bom = {}; S.bomV = 3; }
+  if (!S.v5) { S.variant = "nas2"; S.navTab = "nas2"; S.v5 = 1; }      // výchozí návrh je Custom1
+  S.params = S.params || {}; S.designs = S.designs || [];
+}
 migrate();
 function save() {
   if (ROLE === "viewer") { updateChip(); return; }          // prohlížení: nic se neukládá (ani do prohlížeče)

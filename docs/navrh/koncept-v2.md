@@ -2,7 +2,7 @@
 
 První návrh velkého stroje s ocelovým rámem pro desky 800 × 1800 mm. Rozhodnutí se zapisují do [rozhodnuti.md](rozhodnuti.md).
 
-> **Aktuální stav (15. 11. 2026):** Koncept v2 nahradil [návrh Custom](nas-navrh.md). Stroj se staví na stávající spodní konstrukci (Al profily 40×40, deska 1800 × 750 mm), portál je ze svařených jeklů 25×25, osa Y SBR20 2× 1800 mm, osa X SBR20 2× 1000 mm, pracovní plocha cca 1550 × 680 mm. Tato stránka zůstává jako podklad.
+> **Aktuální stav (15. 11. 2026):** Koncept v2 nahradil [návrh Custom1](nas-navrh.md). Stroj se staví na stávající spodní konstrukci (Al profily 40×40, deska 1800 × 750 mm), portál je ze svařených jeklů 25×25, osa Y SBR20 2× 1800 mm, osa X SBR20 2× 1000 mm, pracovní plocha cca 1550 × 680 mm. Tato stránka zůstává jako podklad.
 
 Vychází z: [prototyp v1](prototyp-v1.md) · [favorit z komunity](../inspirace/favorit-ocelovy-portal.md) · [komunitní projekty](../inspirace/komunitni-projekty.md) · [katalogy dílů](../dily/)
 

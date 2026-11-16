@@ -54,7 +54,7 @@ CATS = {
 WIKI = [
     ("Projekt", [
         ("README.md", "🏠", "Přehled"),
-        ("navrh/nas-navrh.md", "⭐", "Custom"),
+        ("navrh/nas-navrh.md", "⭐", "Custom1 a Custom2"),
         ("navrh/rozhodnuti.md", "🧭", "Rozhodnutí"),
         ("navrh/koncept-v2.md", "📐", "Koncept v2"),
         ("navrh/prototyp-v1.md", "🛠️", "Prototyp v1"),
