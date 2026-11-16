@@ -1,0 +1,33 @@
+/* Horní lišta a rozvržení stránky */
+.topbar{position:sticky;top:0;z-index:50;height:var(--topbar);background:color-mix(in srgb,var(--panel) 90%,transparent);backdrop-filter:saturate(1.4) blur(12px);border-bottom:1px solid var(--line)}
+.topbar-in{max-width:1440px;height:100%;margin:0 auto;display:flex;align-items:center;gap:20px;padding:0 20px}
+.brand{display:flex;align-items:center;gap:9px;font-weight:650;font-size:15px;letter-spacing:-.01em;white-space:nowrap;cursor:pointer}
+.brand .logo{width:26px;height:26px;border-radius:7px;background:var(--accent2);display:grid;place-items:center}
+.brand .logo svg{width:16px;height:16px}
+.tabs{display:flex;gap:2px;overflow-x:auto;scrollbar-width:none;flex:1;align-self:stretch}
+.tabs::-webkit-scrollbar{display:none}
+.tab{position:relative;border:0;background:transparent;padding:0 11px;cursor:pointer;color:var(--muted);font-weight:500;font-size:14px;white-space:nowrap;transition:color .15s}
+.tab:hover{color:var(--text)}
+.tab.active{color:var(--text)}
+.tab.active::after{content:"";position:absolute;left:11px;right:11px;bottom:-1px;height:2px;border-radius:2px;background:var(--accent)}
+.top-actions{display:flex;gap:6px;align-items:center}
+.chip-cart{display:flex;align-items:center;gap:6px;padding:5px 10px;border-radius:999px;background:var(--accentbg);color:var(--accent);font-weight:600;font-size:13px;cursor:pointer;white-space:nowrap}
+.viewchip{padding:4px 10px;border-radius:999px;font-size:12px;font-weight:600;white-space:nowrap;background:var(--bg2);color:var(--muted);cursor:help}
+.sync{width:8px;height:8px;border-radius:50%;background:var(--faint);flex:none;cursor:help;margin:0 4px}
+.sync[data-s="ok"]{background:var(--ok)}
+.sync[data-s="err"]{background:var(--bad)}
+.sync[data-s="wait"]{background:var(--accent);animation:pulse 1s infinite}
+@keyframes pulse{50%{opacity:.3}}
+.iconbtn{width:32px;height:32px;border-radius:8px;border:0;background:transparent;color:var(--muted);cursor:pointer;display:grid;place-items:center;transition:background .15s,color .15s}
+.iconbtn:hover{background:var(--bg2);color:var(--text)}
+.iconbtn svg{width:17px;height:17px}
+a.iconbtn{text-decoration:none}
+main{max-width:1440px;margin:0 auto;padding:20px 20px 64px}
+.view{display:none;animation:fadeIn .2s ease}
+.view.active{display:block}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+body.ro :is(input, select, textarea, #bomEd, #bomRst, #adAdd, #bMake, #dCopy, #dDel, #dRen, #nClear, #nNew, #pReset, #sReset, [data-del], [data-sel]):not(:is(#vwrap, #v-kalkulacky) *){opacity:.55;cursor:not-allowed}
+.ghbtn{display:inline-flex;align-items:center;gap:6px;height:30px;padding:0 10px;margin-right:4px;border:1px solid var(--line2);border-radius:var(--r2);color:var(--text);font-size:13px;font-weight:500;transition:background .15s,border-color .15s}
+.ghbtn svg{width:16px;height:16px}
+.ghbtn:hover{background:var(--bg2);text-decoration:none}
+@media (max-width:700px){.ghbtn{width:32px;padding:0;justify-content:center;border:0}.ghbtn span{display:none}}

@@ -1,0 +1,45 @@
+.legend{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:12.5px;color:var(--muted)}
+.legend span::before{content:"";display:inline-block;width:10px;height:10px;border-radius:3px;background:var(--c);margin-right:6px;vertical-align:-1px}
+.budget{display:grid;grid-template-columns:auto 1fr auto;gap:12px;align-items:center}
+.dbtn{display:flex;gap:6px;flex-wrap:wrap}
+.bomtab td.thc img{background:color-mix(in srgb,var(--panel2) 60%,#fff)}
+.bomtab td.thc img.ph{object-fit:cover}
+.bomtab input.urlIn{width:170px;font-size:12px}
+.bomtab .thpaste{position:relative;width:42px;height:42px;border-radius:8px;outline:2px dashed var(--line2);outline-offset:2px;cursor:copy}
+.bomtab .thpaste:focus,.bomtab .thpaste:hover{outline-color:var(--accent)}
+.bomtab .thpaste .pv{position:absolute;right:-6px;bottom:-6px;font-size:11px;background:var(--panel);border-radius:6px;padding:0 2px;line-height:16px}
+.bomtab .thdel{position:absolute;top:0;right:0;border:0;background:var(--panel);color:var(--muted);border-radius:6px;font-size:10px;cursor:pointer;padding:0 3px}
+.bomtab input.nmIn{width:100%;min-width:180px}
+.bomtab select.kIn{margin-top:4px;font-size:12px;padding:3px 6px}
+.bomtools{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0}
+.addrow2 select#adP{flex:2;min-width:240px}
+.addrow2 input#adN{flex:1;min-width:140px}
+.addrow2 input#adC{width:100px}
+.bld-top input{width:100%;margin-top:4px}
+.bld-top label{font-weight:700;font-size:13px}
+.bgroup{margin:12px 0}
+.bopts{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:8px}
+.bopt b{white-space:nowrap;font-variant-numeric:tabular-nums}
+.bopt.on{border-color:var(--accent);background:var(--accentbg)}
+.bld-foot{position:sticky;bottom:0;display:flex;justify-content:space-between;align-items:center;padding:12px 0 0;margin-top:12px;border-top:1px solid var(--line);background:var(--panel);font-size:16px}
+.sumcards{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px;margin-bottom:12px}
+.sumcard{padding:12px 14px;border-radius:var(--r);border:1px solid var(--line);background:var(--panel);cursor:pointer;transition:border-color .15s,background .15s}
+.sumcard:hover{border-color:var(--line2)}
+.sumcard.on{border-color:var(--accent);background:var(--accentbg)}
+.sumcard .k{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--faint)}
+.sumcard .v{font-size:21px;font-weight:650;letter-spacing:-.02em;font-variant-numeric:tabular-nums;margin:2px 0}
+.sumcard .s{font-size:12.5px;color:var(--muted)}
+.navtabs{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 14px}
+.dhead{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between;margin:4px 0 12px}
+.dhead b{font-size:16px;font-weight:650}
+.bomtab td.thc{width:46px;padding:4px 6px;position:relative}
+.bomtab td.thc img,.bomtab td.thc .ico{width:34px;height:34px;display:block;object-fit:contain;border-radius:7px}
+.bomtab td.thc .ico{display:grid;place-items:center;font-size:16px;background:color-mix(in srgb,var(--c) 12%,transparent)}
+.bomtab tr.grow td{background:var(--panel2)!important;padding-top:8px;padding-bottom:8px;font-weight:600}
+.bomtab .shc{width:110px;text-align:center}
+.bomtab .shopbtn{white-space:nowrap;min-width:94px;text-decoration:none}
+.bomtab a:not(.btn){color:var(--text)}
+.bomtab a:not(.btn):hover{color:var(--accent)}
+.bopt{display:flex;justify-content:space-between;gap:10px;align-items:center;text-align:left;padding:9px 12px;border-radius:var(--r2);border:1px solid var(--line);background:var(--panel);cursor:pointer;font-size:13.5px}
+.bld-foot b{font-size:20px}
+.addrow2{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-top:10px;padding:10px;border:1px dashed var(--line2);border-radius:var(--r)}

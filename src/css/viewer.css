@@ -1,0 +1,144 @@
+/* 3D model: scéna, ovládací lišta, popisky a kóty ve scéně, panel parametrů a kontrol */
+.viewer-wrap{position:relative;border-radius:12px;overflow:hidden;border:1px solid var(--line);background:linear-gradient(180deg,#1b2230,#0d1117);height:min(68vh,660px);min-height:420px}
+.viewer-wrap.fs{position:fixed;inset:0;height:100vh;z-index:150;border-radius:0}
+#viewer{position:absolute;inset:0}
+#viewer canvas{display:block}
+#bHud{display:none!important}
+.viewer-wrap.nohud .vhud,.viewer-wrap.nohud .steplabel{display:none}
+
+/* štíhlý řádek souřadnic v levém horním rohu */
+.vhud{position:absolute;left:0;top:0;display:flex;pointer-events:none}
+.vhud .box{color:#dfe6ef;backdrop-filter:blur(6px)}
+.vhud .box:not(.coords){display:none}
+.vhud .box.coords{display:flex;align-items:baseline;gap:5px;padding:4px 12px;border-radius:0 0 9px 0;border:solid rgba(255,255,255,.08);border-width:0 1px 1px 0;font:500 11.5px var(--mono);background:rgba(10,13,18,.55)}
+.vhud .coords span{color:#8b97a8}
+.vhud .coords span:not(:first-child){margin-left:9px}
+.vhud .coords b{color:var(--accent2);font-weight:600}
+
+/* fáze animace vpravo nahoře */
+.steplabel{position:absolute;top:12px;right:12px;background:rgba(10,13,18,.72);color:#fff;padding:8px 12px;border-radius:9px;max-width:320px;font-size:12.5px;border:1px solid rgba(255,255,255,.08);backdrop-filter:blur(6px)}
+.steplabel b{color:var(--accent2);display:block;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.07em}
+
+/* ovládací lišta dole */
+.vtool{position:absolute;left:10px;right:10px;bottom:10px;display:flex;gap:6px;align-items:center;flex-wrap:wrap;background:rgba(10,13,18,.72);border:1px solid rgba(255,255,255,.08);padding:6px 8px;border-radius:11px;color:#dfe6ef;backdrop-filter:blur(8px)}
+.vtool button{min-width:32px;height:30px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.09);color:#fff;padding:0 9px;border-radius:7px;cursor:pointer;font-size:13px;font-weight:500}
+.vtool button:hover{background:rgba(255,255,255,.15)}
+.vtool button.on{background:var(--accent2);color:#1b1300;border-color:var(--accent2)}
+.vtool .grp{display:flex;gap:5px;align-items:center}
+.vtool .sep{width:1px;height:20px;background:rgba(255,255,255,.14)}
+.vtool label{font-size:12px;color:#aab4c3}
+.vtool input[type=range]{width:80px}
+.vtool select{height:30px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.1);color:#fff;border-radius:7px;padding:0 8px;font-size:12.5px;box-shadow:none}
+.vtool select option{color:#000}
+@media (max-width:1700px){.vtool .t{display:none}}
+
+/* popisky dílů a kóty ve scéně */
+.v3labels{position:absolute;inset:0;pointer-events:none;overflow:hidden}
+.v3lab{position:absolute;left:0;top:0;white-space:nowrap;font:500 11px var(--font);color:#fff;background:rgba(10,13,18,.82);border:1px solid rgba(255,255,255,.14);padding:3px 7px;border-radius:6px;margin-top:-10px;opacity:0;transition:opacity .25s;max-width:280px}
+.v3lab.on{opacity:1}
+.v3lab::after{content:"";position:absolute;left:50%;bottom:-10px;width:1px;height:10px;background:rgba(255,255,255,.5)}
+.v3lab.major{background:rgba(245,165,36,.95);color:#1b1300;border-color:transparent;font-weight:600;font-size:11.5px}
+.v3lab small{display:block;font-weight:400;opacity:.78;font-size:10.5px}
+.v3tip{position:absolute;left:50%;top:12px;transform:translateX(-50%);background:rgba(245,165,36,.95);color:#1b1300;font-weight:600;font-size:12px;padding:4px 11px;border-radius:999px;opacity:0;transition:opacity .2s;pointer-events:none;white-space:nowrap}
+.v3dim{position:absolute;left:0;top:0;white-space:nowrap;font:600 11.5px var(--mono);color:#1b1300;background:#ffc94d;padding:2px 6px;border-radius:5px;opacity:0;transition:opacity .2s;text-align:center;line-height:1.25}
+.v3dim small{display:block;font:400 10px var(--font);opacity:.8}
+.v3dim.on{opacity:1}
+.v3dim.edit{pointer-events:auto;cursor:pointer;box-shadow:0 0 0 2px rgba(255,201,77,.35)}
+.v3dim.edit:hover{background:#ffe08a}
+.v3dim.warn{background:#ff6b6b;color:#fff}
+.v3dim input{width:66px;height:auto;font:600 11.5px var(--mono);border:0;border-radius:4px;padding:1px 4px;text-align:right}
+.sdot{display:inline-block;margin-left:6px;padding:0 6px;border-radius:5px;background:rgba(255,255,255,.08);font-family:var(--mono)}
+.sdot.on{background:#ff9a1a;color:#1b1300}
+
+/* nápověda a souhrn pod scénou */
+.vhint{font-size:12px;color:var(--faint);margin:8px 2px 12px}
+.vhint .mob{display:none}
+.vbar{display:flex;flex-wrap:wrap;gap:12px 20px;align-items:center;justify-content:space-between;padding:12px 16px;border:1px solid var(--line);border-radius:var(--r);background:var(--panel);margin:0 0 12px}
+.vbar-l b{display:block;font-size:15px;font-weight:650}
+.vbar-l span{font-size:12.5px}
+.vbar-p{display:flex;gap:22px}
+.vbar-p span{font-size:11px;color:var(--faint);font-weight:600;text-transform:uppercase;letter-spacing:.06em}
+.vbar-p b{display:block;font-size:19px;font-weight:650;color:var(--text);letter-spacing:-.015em;text-transform:none;font-variant-numeric:tabular-nums}
+.vbar-b{display:flex;gap:6px;flex-wrap:wrap}
+
+/* rozměry, parametry a kontroly */
+.ptable{padding:12px 16px}
+.ptable summary{cursor:pointer;font-weight:600;font-size:14px}
+.checks{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:8px;margin:12px 0 16px}
+.chk{padding:8px 10px 8px 12px;border-radius:var(--r2);font-size:12.5px;display:flex;flex-direction:column;gap:1px;background:var(--panel2);border:1px solid var(--line);border-left:3px solid var(--ok)}
+.chk.warn{border-left-color:var(--bad)}
+.chk b{font-size:12.5px;font-weight:600;color:var(--text)}
+.chk.ok b::before{content:"✓ ";color:var(--ok)}
+.chk.warn b::before{content:"! ";color:var(--bad);font-weight:700}
+.chk span{font-variant-numeric:tabular-nums}
+.chk small{color:var(--muted);font-size:11.5px}
+.pgroups{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px 24px;margin-top:4px}
+.pg-h{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--faint);margin-bottom:4px}
+.prow{display:grid;grid-template-columns:1fr 76px 22px;gap:8px;align-items:center;font-size:13px;padding:2px 0;line-height:1.3}
+.prow input{height:28px;padding:0 8px;text-align:right}
+.prow em{font-style:normal;color:var(--faint);font-size:11.5px}
+
+/* popis varianty, plusy/mínusy, postup stavby, srovnání */
+.proscons{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.proscons ul{margin:6px 0;padding-left:18px}
+.proscons li{margin:3px 0;font-size:13.5px}
+.pc-h{font-weight:600;font-size:11.5px;text-transform:uppercase;letter-spacing:.06em}
+.bars .row{display:grid;grid-template-columns:150px 1fr 40px;gap:10px;align-items:center;margin:6px 0;font-size:13px}
+.bar{height:6px;border-radius:6px;background:var(--bg2);overflow:hidden}
+.bar i{display:block;height:100%;border-radius:6px;background:var(--accent2);transition:width .6s}
+.steps{counter-reset:s}
+.step{display:flex;gap:12px;padding:9px 10px;border-radius:var(--r2);cursor:pointer;transition:background .15s;align-items:flex-start}
+.step:hover{background:var(--bg2)}
+.step.cur{background:var(--accentbg)}
+.step .no{counter-increment:s;flex:none;width:24px;height:24px;border-radius:50%;display:grid;place-items:center;font-weight:600;font-size:12px;background:var(--bg2);border:1px solid var(--line2)}
+.step .no::before{content:counter(s)}
+.step.done .no{background:var(--ok);border-color:var(--ok);color:#fff}
+.step.done .no::before{content:"✓"}
+.step b{display:block;font-size:14px;font-weight:600}
+.step span{font-size:13px;color:var(--muted)}
+.step input{margin-top:6px}
+.cmp td,.cmp th{text-align:center}
+.cmp td:first-child,.cmp th:first-child{text-align:left}
+.dots{letter-spacing:2px;color:var(--accent)}
+.dots i{color:var(--line2);font-style:normal}
+
+/* kusovník (sdílené s Kalkulací) */
+.bomtab td.g{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--faint);background:var(--panel2)!important;padding-top:10px}
+.bomtab td.g .badge{margin-left:8px;text-transform:none;letter-spacing:0}
+.bomtab tr.off td{opacity:.4;text-decoration:line-through}
+.bomtab tr.have td{color:var(--muted)}
+.bomtab .nm{display:flex;flex-direction:column}
+.bomtab .nm small{color:var(--faint)}
+.seg{height:30px;padding:0 12px;border-radius:999px;border:1px solid var(--line2);background:var(--panel);font-weight:500;font-size:13px;cursor:pointer}
+.seg.on{background:var(--text);color:var(--panel);border-color:var(--text)}
+.navtabs .seg{display:flex;align-items:center;gap:8px}
+.navtabs .seg i{width:8px;height:8px;border-radius:50%;background:var(--c)}
+.kdot{display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--c);margin-right:8px;vertical-align:1px}
+.legend{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:12px;color:var(--muted)}
+.legend span::before{content:"";display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--c);margin-right:6px;vertical-align:0}
+.vlist{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin-bottom:18px}
+
+/* výrobní výkresy */
+.ptable + .ptable{margin-top:12px}
+.dwgs{margin-top:12px}
+.dwgs .cut td,.dwgs .cut th{font-size:12.5px}
+.dgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-top:12px}
+.dcard{margin:0;padding:10px 12px 12px;border:1px solid var(--line);border-radius:var(--r);background:var(--panel)}
+.dcard.wide{grid-column:1/-1}
+.dcard figcaption{font-size:12px;font-weight:600;color:var(--muted);margin-bottom:6px}
+.dwg{width:100%;height:auto;display:block}
+.dwg .p{fill:var(--panel2);stroke:var(--text);stroke-width:1.2;vector-effect:non-scaling-stroke}
+.dwg .p.fb{fill:color-mix(in srgb,var(--faint) 18%,transparent)}
+.dwg .p.pl{fill:color-mix(in srgb,#7cc4ff 16%,transparent)}
+.dwg .p.al{fill:color-mix(in srgb,var(--faint) 12%,transparent)}
+.dwg .h{fill:var(--panel);stroke:var(--text);stroke-width:1;vector-effect:non-scaling-stroke}
+.dwg .h.cs{fill:none;stroke-dasharray:2 2}
+.dwg .c{stroke:var(--faint);stroke-width:.6;vector-effect:non-scaling-stroke}
+.dwg .br{stroke:var(--text);stroke-width:25;stroke-opacity:.18}
+.dwg .ext{stroke:#d97706;stroke-width:.7;opacity:.7;vector-effect:non-scaling-stroke}
+.dwg .dl{stroke:#d97706;stroke-width:1;vector-effect:non-scaling-stroke;fill:none}
+.dwg .dt{font:600 calc(11.5px * var(--k)) var(--mono);fill:#d97706}
+.dwg .dt.s{font-size:calc(10.5px * var(--k))}
+.dwg .nt{font:400 calc(11.5px * var(--k)) var(--font);fill:var(--muted)}
+.dwg .ht{font:400 calc(10px * var(--k)) var(--mono);fill:var(--muted)}
+@media (max-width:900px){.dgrid{grid-template-columns:1fr}}
