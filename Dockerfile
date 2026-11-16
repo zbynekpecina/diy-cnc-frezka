@@ -1,5 +1,5 @@
 # 1) sestavení webu (náhledy obrázků potřebují Pillow, numpy a scipy)
-FROM python:3.12-slim AS build
+FROM python:3.15-slim AS build
 WORKDIR /app
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
@@ -9,7 +9,7 @@ COPY tools/build.py tools/build.py
 RUN python tools/build.py
 
 # 2) běh: jen server ze standardní knihovny + hotový web
-FROM python:3.12-alpine
+FROM python:3.15-alpine
 WORKDIR /app
 RUN adduser -D -H -u 10001 app && mkdir /data && chown app /data
 COPY --from=build /app/web web
