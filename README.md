@@ -96,9 +96,6 @@ Celá aplikace je **jeden HTML soubor bez frameworku**. Funguje offline, na mobi
 | **Wiki** | **Produkty** |
 | <img src=".github/assets/wiki.jpg" alt="Wiki" width="400"> | <img src=".github/assets/produkty.jpg" alt="Katalog produktů" width="400"> |
 
-<img src=".github/assets/mobil.jpg" alt="Mobilní zobrazení" width="260">
-
-<sub>Mobilní zobrazení v tmavém motivu</sub>
 
 </div>
 
