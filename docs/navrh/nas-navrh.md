@@ -35,7 +35,7 @@ Podkladová deska má díry Ø25 v rastru 100 mm napříč a 200 mm podél. Obro
 
 - Dva příčníky z jeklu 25×25 jsou přivařené mezi stojky a tvoří jeden rám. Rozteč příčníků je 150 mm, délka 765 mm.
 - Pod kolejnicemi je pásovina 50×6, protože díry podpěry SBR20 jsou mimo jekl 25×25.
-- Kolejnice SBR20 2× 1 000 mm (SucceBuy) se čtyřmi vozíky SBR20UU, přesah přes rám cca 85 mm na každé straně.
+- Kolejnice SBR20 2× 1 000 mm (SucceBuy) se čtyřmi vozíky SBR20UU, přesah přes rám 72,5 mm na každé straně (Custom1).
 
 ### Vozík X a osa Z
 
