@@ -372,10 +372,9 @@ const V3 = (() => {
     if (!SND.ctx || !SND.on) return;
     const t = SND.ctx.currentTime, run = st.play && st.step >= STEPS_N && !paused, cut = run && st.cutting;
     SND.gS.gain.setTargetAtTime(run ? .06 : 0, t, .2);
-    SND.gN.gain.setTargetAtTime(cut ? .5 * (.75 + Math.random() * .5) : (run ? .015 : 0), t, cut ? .025 : .07);
-    const f = run ? (cut ? 221 + Math.random() * 5 : 233) : 233;
-    SND.o1.frequency.setTargetAtTime(f, t, .1); SND.o2.frequency.setTargetAtTime(f * 2, t, .1);
-    SND.bp.frequency.setTargetAtTime(cut ? 800 + Math.random() * 700 : 1200, t, .04);
+    SND.gN.gain.setTargetAtTime(0, t, .05);                       // bez šumu řezání – jen bzučení vřetena
+    const f = cut ? 226 : 233;                                    // při řezu otáčky mírně klesnou
+    SND.o1.frequency.setTargetAtTime(f, t, .25); SND.o2.frequency.setTargetAtTime(f * 2, t, .25);
   }
   function updLabels() {
     const w = host.clientWidth, h = host.clientHeight;
@@ -1494,20 +1493,19 @@ const V3 = (() => {
     for (const s of [-1, 1]) cable(Eg, [[s * half, xSwY - 12, frontZ - 6], [s * pI, xSwY - 12, frontZ - 4], [s * pI, bY, beamZ], [-pI, bY, beamZ], [-pI, c.conTop + 30, beamZ], [-pI, c.conTop + 30, frontZ - 3], [-(half + ps / 2 + 3), c.conTop + 30, frontZ - 3], [-half - 14, yEnd[1] - 10, 20], yE2], WR, s > 0 ? wY : wG, 7);
     for (const xx of [-half + 60, 0, half - 120]) tie(Eg, xx, bY, beamZ - 10, "x", 4);
     // ===== vysavač + hadice =====
-    // objímky hadice: na vozíku X (nad úchytem řetězu), nahoře a dole na stojce −X (vnější strana) a na hraně stolu
-    const clamp3 = (par, x, y, z, ax, lbl, sub) => {
-      const g = grp(par, x, y, z), ring = new THREE.Mesh(new THREE.TorusGeometry(mm(23), mm(3), 8, 24), MAT.steel);
-      if (ax === "y") ring.rotation.x = Math.PI / 2; if (ax === "x") ring.rotation.y = Math.PI / 2; g.add(ring);
-      const o = new THREE.Object3D(); g.add(o); if (lbl) lab(g, 0, 40, 0, lbl, sub, 7); return o;
-    };
-    const hc1 = clamp3(Ec, -70, c.plexiCY + p.plexiH / 2 + 60, plFront - 50, "y", "Hose clamp on X carriage", "rides with the carriage, no gallows needed");
-    B(6, 70, 24, MAT.aluD, -70, c.plexiCY + p.plexiH / 2 + 22, plFront - 26, Ec);                      // držák objímky na horní hraně plexi
-    const pxo = -(half + ps / 2 + 26), hzc = postZ;
-    const hc2 = clamp3(G, pxo, c.conTop + p.postH - 30, hzc, "y", "Hose clamps on upright", "outer side, away from operator");
-    const hc3 = clamp3(G, pxo, c.conTop + 40, hzc, "y");
-    for (const yy of [c.conTop + p.postH - 30, c.conTop + 40]) B(26, 8, 8, MAT.aluD, -(half + ps / 2 + 12), yy, hzc, G);
-    const hc4 = clamp3(Ev, -(tW / 2 + 60), tTop + 20, 0, "y", "Hose clamp on table edge", "fixed point, then smoothly under the table");
-    B(70, 8, 30, MAT.aluD, -(tW / 2 + 30), tTop - 4, 0, Ev);
+    // držák hadice: jekl 20×20 přišroubovaný zezadu na horní příčník, nahoře rameno dopředu nad vřeteno, na konci oko
+    const hTopY = c.topBeamY + 470, hBackZ = beamZ + bsz / 2 + 32, hArmZ = frontZ - 190, hX = 0;
+    const hg = grp(Eg, 0, 0, 0);
+    B(20, 50, 22, MAT.aluD, hX, c.topBeamY, beamZ + bsz / 2 + 11, hg);                   // distanční hranol za řetězem osy X
+    B(20, hTopY - (c.topBeamY - bsz / 2), 20, MAT.frame, hX, (hTopY + c.topBeamY - bsz / 2) / 2, hBackZ, hg);
+    for (const yy of [c.topBeamY - 10, c.topBeamY + 10]) Cy(4, 3, MAT.steel, hX, yy, hBackZ + 11.5, "z", hg, 6);
+    B(20, 20, hBackZ - hArmZ + 10, MAT.frame, hX, hTopY + 10, (hBackZ + hArmZ) / 2, hg);
+    tubeBetween(hg, [hX, hTopY - 120, hBackZ], [hX, hTopY, hBackZ - 120], 15, MAT.frame);
+    const ring = new THREE.Mesh(new THREE.TorusGeometry(mm(26), mm(3), 8, 24), MAT.steel); ring.rotation.x = Math.PI / 2; ring.position.set(mm(hX), mm(hTopY - 6), mm(hArmZ + 10)); hg.add(ring);
+    const hRing = new THREE.Object3D(); hRing.position.set(mm(hX), mm(hTopY - 6), mm(hArmZ + 10)); hg.add(hRing);
+    const hBack = new THREE.Object3D(); hBack.position.set(mm(hX), mm(hTopY + 26), mm(hBackZ)); hg.add(hBack);
+    for (let k = 1; k <= 3; k++) tie(hg, hX, hTopY + 31, hBackZ - k * (hBackZ - hArmZ) / 4, "z", 24);
+    lab(hg, hX, hTopY + 60, hBackZ, "Hose holder", "20×20 tube centred on top beam, eyelet above spindle", 7);
     // vysavač na zemi vedle stolu (strana −X, u konce +Z)
     const vX = -(tW / 2 - 260), vZ = tL / 2 - 330, vg = grp(Ev, vX, 0, vZ), vR = 175, vH = 420;   // pod stolem u konce +Z
     const vYel = new THREE.MeshStandardMaterial({color: 0xd9a21b, roughness: .55}), vGr = new THREE.MeshStandardMaterial({color: 0x30343a, roughness: .7});
@@ -1538,18 +1536,15 @@ const V3 = (() => {
       h.m.geometry.dispose(); h.m.geometry = new THREE.TubeGeometry(curve, 70, mm(r), 12, false);
       h.m.material.map.repeat.set(curve.getLength() * 1000 / 7, 1);
     };
-    const hoseC = mkHose(), hoseD = mkHose();
     DYN.push(() => {
-      const P = toR(S_hosePort), A = toR(hc1), U = toR(hc2), L = toR(hc3), T = toR(hc4);
-      setHose(hoseA, [P, [P[0], P[1] + 60, P[2]], [(P[0] + A[0]) / 2, (P[1] + A[1]) / 2 + 20, (P[2] + A[2]) / 2 - 15], [A[0], A[1] - 40, A[2]], A, [A[0], A[1] + 30, A[2]]], 20);
-      const mid = [(A[0] + U[0]) / 2, Math.max(A[1], U[1]) + 140, (A[2] + U[2]) / 2 - 30];               // volná smyčka nad příčníkem
-      setHose(hoseB, [[A[0], A[1] + 30, A[2]], [A[0], A[1] + 90, A[2]], mid, [U[0], U[1] + 90, U[2]], [U[0], U[1] + 30, U[2]], U, L], 20);
-      const dz = T[2] - L[2], low = Math.min(L[1], T[1]) - 140;                                          // smyčka k pevnému bodu na hraně stolu
-      setHose(hoseC, [L, [L[0], L[1] - 50, L[2]], [L[0] - 30, low, L[2] + dz * .35], [T[0] - 20, low + 30, T[2] - dz * .2], [T[0], T[1] - 40, T[2]], T], 20);
+      const P = toR(S_hosePort), R = toR(hRing), Bk = toR(hBack), dx = P[0] - R[0];
+      setHose(hoseA, [P, [P[0], P[1] + 70, P[2]], [P[0] * .7 + R[0] * .3, P[1] + (R[1] - P[1]) * .55, P[2] - 25], [R[0] + dx * .15, R[1] - 70, R[2]], R, [R[0], R[1] + 34, R[2] + 30], [Bk[0], Bk[1], Bk[2] - 60], Bk], 20);
+      // ze šibenice dozadu a na stranu −X (dál od obsluhy), vně hrany stolu dolů a plynule pod stůl k vysavači
+      const gz = Bk[2], ex = -(tW / 2 + 70), zm = (gz + vIn[2]) / 2;
+      setHose(hoseB, [Bk, [Bk[0], Bk[1] + 30, Bk[2] + 90], [Bk[0] - 200, Bk[1] - 20, gz + 170], [ex + 60, Bk[1] - 220, gz + 150], [ex, tTop + 160, zm + 40], [ex - 10, tTop - 60, zm + 60],
+        [ex - 20, legH - 160, (zm + vIn[2]) / 2], [ex - 10, vIn[1] + 110, vIn[2] - 10], [vIn[0] - 70, vIn[1] + 8, vIn[2]], vIn], 20);
     });
-    { const ex = -(tW / 2 + 60);                                                         // z hrany stolu plynule dolů a pod stůl k vysavači
-      setHose(hoseD, [[ex, tTop + 20, 0], [ex, tTop - 60, 0], [ex - 30, legH - 140, vIn[2] * .35], [ex - 10, vIn[1] + 120, vIn[2] * .8], [vIn[0] - 70, vIn[1] + 10, vIn[2]], vIn], 20); }
-    lab(Ev, -(tW / 2 + 90), tTop + 200, -260, "Vacuum hose Ø40", "shoe → carriage clamp → upright −X → table edge → under the table", 7);
+    lab(Ev, -(tW / 2 + 90), tTop + 200, 0, "Vacuum hose Ø40", "shoe → holder eyelet → over gantry to side −X → outside table edge → under the table", 7);
     // senzory
     B(4, 34, 44, MAT.aluD, -42, zL / 2 - 30, -28, zBody); B(18, 4, 22, MAT.aluD, -52, zL / 2 - 30, -40, zBody);   // L držák čidla Z na boku modulu
     const sZ = sensor(zBody, -52, zL / 2 - 30, -40, "y", "Z sensor (home at top)", "inductive M12", 7);
