@@ -2,4 +2,4 @@
 # Server (tools/server.py) žádné závislosti nemá.
 pillow>=10
 numpy>=1.26
-scipy>=1.11
+scipy>=1.18.1
