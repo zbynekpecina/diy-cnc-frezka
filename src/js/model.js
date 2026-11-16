@@ -56,7 +56,11 @@ function renderVarianty() {
   if (V3.cur !== v) { V3.build(v); $("#bStep").value = V3.state.step; $("#bView").value = "iso"; $("#bExp").classList.remove("on"); $("#bExp").innerHTML = "🧩<span class=\"t\"> Rozložit</span>"; }
   if (!introDone) {                                  // úvodní animace: stavba krok za krokem, pak gravírování nápisu a srovnání
     introDone = true;
-    if (!matchMedia("(prefers-reduced-motion: reduce)").matches) startAsm(1100, () => { V3.reset(); updateStepLabel(VBY[S.variant]); });
+    const go = () => startAsm(1200, () => {                       // po stavbě: gravírování nápisu a srovnání desky
+      V3.reset(); if (!V3.state.play) $("#bPlay").click(); updateStepLabel(VBY[S.variant]);
+    });
+    if (document.hidden) document.addEventListener("visibilitychange", function once() { if (!document.hidden) { document.removeEventListener("visibilitychange", once); go(); } });
+    else go();
   }
   $("#hudt").textContent = v.short; $("#hudarea").textContent = `obrobek ${v.area[1]} × ${v.area[0]} mm`;
   renderVbar(v); renderPtable(v); renderDwg(v); updateStepLabel(v);
