@@ -272,6 +272,8 @@ const V3 = (() => {
   }
   function isVis(o) { while (o) { if (!o.visible) return false; o = o.parent; } return true; }
   // ---------- rozložený pohled ----------
+  // díl se při stavbě nezasune shora, ale ve svém směru (šrouby po ose, vozíky po kolejnici, deska zepředu…)
+  function ins(o, dx, dy, dz, delay = 0) { if (o) o.userData.ins = {v: new THREE.Vector3(mm(dx), mm(dy), mm(dz)), delay, base: o.position.clone()}; return o; }
   function explodable(g, name, items) {
     g.userData.explode = {name, on: false, k: 0, items: items.filter(it => it[0]).map(([obj, v]) => ({obj, v: new THREE.Vector3(mm(v[0]), mm(v[1]), mm(v[2])), base: obj.position.clone()}))};
     EXPL.push(g); return g;
@@ -1100,6 +1102,7 @@ const V3 = (() => {
       tubeBetween(weld, [s * half, c.conTop - 12.5, -bs / 2], [s * half, braceTop, postZ], 25, MAT.frame);   // vzpěra: osa z osy spojky (přední vozík) do osy svislého jeklu → konce zapuštěné, lícuje
       B(ps + 8, 4, ps + 8, MAT.aluB, s * half, c.conTop + p.postH + 2, postZ, weld);
       for (const zc of [-bs / 2, bs / 2]) for (const a of [-1, 1]) for (const b of [-1, 1]) Cy(5, 4, MAT.steel, s * half + a * 17.5, c.blockTop + c.barT + 2, zc + b * 17.5, "y", bolts, 6);
+      ins(blk, 0, 0, -p.railY / 2 - 150); ins(weld, 0, 160, 0, .35); ins(bolts, 0, 90, 0, .7);   // vozíky se nasunou z konce kolejnice
       explodable(asm, `vozíky Y ${s < 0 ? "vlevo" : "vpravo"} + svařenec`, [[bolts, [0, 150, 0]], [weld, [0, 90, 0]], [blk, [0, 25, 0]]]);
       lab(asm, s * half, c.conTop + p.postH * .5, postZ - ps, `Upright ${ps}×${ps} tube`, `${p.postH} mm, welded to carriage bridge`, 3);
       lab(asm, s * half, c.conTop + 10, -bs / 2 - 40, "Brace, 25×25 tube", "from front carriage", 3);
@@ -1139,9 +1142,10 @@ const V3 = (() => {
       Cy(4.2, 5, MAT.black, hx, hy, plFront - 2.5, "z", xScr, 6); Cy(5.5, 1, MAT.steel, hx, hy, plFront - .5, "z", xScr, 12);
       Cy(2.5, p.plexiT + 12, MAT.steel, hx, hy, plZ + 4, "z", xScr, 8);
     }
-    lab(plexG, p.plexiW / 2, c.plexiCY + p.plexiH / 2, plFront, `Plexiglass plate ${p.plexiW}×${p.plexiH}×${p.plexiT} mm`, "X carriage plate, holes on 32×30 mm pattern", 4);
+    ins(xBlk, p.railX / 2 + 120, 0, 0); ins(plexG, 0, 0, -160, .35); ins(xScr, 0, 0, -90, .7);
+    lab(plexG, p.plexiW / 2, c.plexiCY + p.plexiH / 2, plFront, `Plexiglass plate ${p.plexiW}×${p.plexiH}×${p.plexiT} mm`, "X carriage plate, holes on 35×35 mm pattern (M6)", 4);
     lab(xBlk, -c.bx, c.topBeamY + 30, frontZ - 40, "SBR20UU carriages ×4", "48×50 mm, 4× M6 (35×35 pattern)", 4);
-    lab(xScr, c.bx + 16, c.lowBeamY - 15, plFront - 6, "M5 screws ×16", "through plexi into carriages", 4);
+    lab(xScr, c.bx + 16, c.lowBeamY - 15, plFront - 6, "M6 screws ×16", "through plexi into carriages", 4);
     // ===== 5 modul osy Z (Allegro 200 mm: 2 tyče + kuličkový šroub Ø16, ruční kolo → později NEMA23) =====
     const C5 = part(5, C), zAsm = grp(C5, 0, c.modCY, plFront);
     const zL = c.zLen, zBody = grp(zAsm, 0, 0, 0), zTop = grp(zAsm, 0, 0, 0), zMot = grp(zAsm, 0, 0, 0);
@@ -1156,6 +1160,7 @@ const V3 = (() => {
       Cy(2.5, p.plexiT + 14, MAT.steel, bx2, by, p.plexiT / 2 - 5, "z", zBolts, 8);
       Cy(4.6, 4, MAT.black, bx2, by, p.plexiT + 3.5, "z", zBolts, 6); Cy(5.5, 1, MAT.steel, bx2, by, p.plexiT + 1, "z", zBolts, 14);
     }
+    ins(zBody, 0, 0, -140); ins(zTop, 0, 0, -140); ins(zBolts, 0, 0, 80, .4);
     lab(zBolts, 33, Math.min(60, p.plexiH / 2 - 18), p.plexiT + 6, "M6 screws ×6", "from behind through plexi into Z module T-nuts (row spacing 66)", 5);
     B(70, 50, 60, MAT.alu, 0, zL / 2 + 25, -36, zMot);                           // příruba NEMA23 (místo ručního kola)
     B(50, 30, 62, MAT.black, 0, zL / 2 + 25, -36, zMot);
@@ -1174,9 +1179,10 @@ const V3 = (() => {
     // adaptér: Al deska 10 mm – patka vřetena má díry 95 mm od sebe, vozík je široký jen 80 (díry M5 60 × 30)
     B(120, 175, 10, MAT.alu, 0, carC0 - 50, -61, A5);
     for (const a of [-1, 1]) for (const b of [-1, 1]) Cy(4.2, 3, MAT.black, a * 30, carC0 + b * 15, -67.5, "z", A5, 6);        // 4× M5 zápustné do vozíku
+    ins(zCar, 0, 0, -120); ins(zAdp, 0, 0, -120, .35);
     lab(A5, 70, carC0 - 120, -66, "Spindle adapter – 10 mm Al 120×175", "carriage holes 60×30 (M5) · mount holes 95 × 35 (M6)", 5);
     // vřeteno 2,2 kW (step 6)
-    const S6 = part(6, SP), spZ = -66 - 37, spTop = carC0 + 20, spBot = spTop - 166;   // osa vřetena 37 mm od líce patky
+    const S6 = ins(part(6, SP), 0, 0, -220), spZ = -66 - 37, spTop = carC0 + 20, spBot = spTop - 166;   // vřeteno se přisune zepředu na adaptér   // osa vřetena 37 mm od líce patky
     B(110, 165.5, 9, MAT.alu, 0, spBot + 83, -70.5, S6);                       // patka 110 × 165,5
     B(82, 165.5, 64, MAT.fins, 0, spBot + 83, -66 - 9 - 32, S6);                  // tělo (celkem 73 od líce patky)
     for (const a of [-1, 1]) for (let k = 0; k < 4; k++) Cy(5, 4, MAT.black, a * 47.5, spBot + 165.5 - 30 - k * 35, -77, "z", S6, 6);   // 8× M6 do adaptéru
@@ -1297,7 +1303,7 @@ const V3 = (() => {
       for (const yy of [-40, 40]) B(cOut - cIn, 4, cD, MAT.alu, s * (cIn + cOut) / 2, yC + yy, -yE, mg);   // příruby
       B(6, 84, cD, MAT.alu, plX, yC, -yE, mg);                                             // deska motoru
       for (const yy of [-25, 25]) { Cy(4, 3, MAT.steel, s * (cIn + 5.5), yC + yy, -yE, "x", mg, 6); }
-      const mt = grp(mg, 0, 0, 0); nema23(mt, plX + s * 3, yC, -yE, s > 0 ? "x-" : "x+");
+      const mt = grp(mg, 0, 0, 0); nema23(mt, plX + s * 3, yC, -yE, s > 0 ? "x-" : "x+"); ins(mt, s * 140, 0, 0, .3);   // motor po ose hřídele
       const pu = spinner(mg, bx, yC, -yE, "x+"); pulley(pu, PRr - 2, BW + 2); pul.push({o: pu, a: "z", k: 1 / PRr});
       wrap(mg, bx, yC, -yE, "x", Math.PI / 2);
       // napínací kladka – konec +Z (kladka na šroubu v drážce desky, napínací šroub M6)
@@ -1344,7 +1350,7 @@ const V3 = (() => {
     const xm = grp(D6g, 0, 0, 0);
     B(pW, 80, 6, MAT.alu, -pC, xY, frontZ - 3, xm);                                       // deska motoru na čele stojky
     for (const a2 of [-1, 1]) for (const b2 of [-1, 1]) Cy(4.5, 4, MAT.steel, -(half + a2 * 10), xY + b2 * 28, frontZ - 7, "z", xm, 6);
-    const xmt = grp(xm, 0, 0, 0); nema23(xmt, -xE, xY, frontZ, "z-");                      // tělo motoru za deskou, vedle stojky
+    const xmt = grp(xm, 0, 0, 0); nema23(xmt, -xE, xY, frontZ, "z-"); ins(xmt, 0, 0, 140, .3);                      // tělo motoru za deskou, vedle stojky
     const xpu = spinner(xm, -xE, xY, xZ, "z+"); pulley(xpu, PRr - 2, BW + 2); pul.push({o: xpu, a: "x", k: 1 / PRr});
     wrap(xm, -xE, xY, xZ, "z", Math.PI);
     const xt = grp(D6g, 0, 0, 0);
@@ -1640,12 +1646,25 @@ const V3 = (() => {
       if (o.userData.step == null) return;
       const s = o.userData.step;
       o.visible = s <= n;
+      if (o.userData.ins) return;                                 // pohyb řeší druhý průchod (směr vložení)
       if (!instant && s === n && n > prev) { o.position.y = o.userData.base.y + .45; st.anim.push({o, t: 0}); }
       else if (s <= n && !o.setSpan) o.position.copy(o.userData.base);
     });
+    root.traverse(o => {                                         // díly se směrem vložení (šrouby, vozíky, desky, motory)
+      const I = o.userData.ins; if (!I) return;
+      let a = o; while (a && a.userData.step == null) a = a.parent;
+      const s = a ? a.userData.step : 0;
+      if (!instant && s === n && n > prev) { o.position.copy(I.base).add(I.v); st.anim.push({o, t: -I.delay, ins: I}); }
+      else o.position.copy(I.base);
+    });
   }
   function tickAnim(dt) {
-    st.anim = st.anim.filter(a => { a.t += dt * 1.6; const e = 1 - Math.pow(1 - Math.min(a.t, 1), 3); a.o.position.y = a.o.userData.base.y + .45 * (1 - e); return a.t < 1; });
+    st.anim = st.anim.filter(a => {
+      a.t += dt * 1.6; const e = 1 - Math.pow(1 - clamp(a.t, 0, 1), 3);
+      if (a.ins) a.o.position.copy(a.ins.base).addScaledVector(a.ins.v, 1 - e);
+      else a.o.position.y = a.o.userData.base.y + .45 * (1 - e);
+      return a.t < 1;
+    });
   }
   // ---------- kamera ----------
   const DETAIL = {dZ: {a: "z", off: [.45, .14, -.68]}, dY: {a: "y", off: [.62, .22, .5]}, dX: {a: "x", off: [.38, .42, .62]}, dEl: {a: "el", off: [.25, .12, -1.05]}, dDisp: {a: "disp", off: [.06, .1, -.55]}};
