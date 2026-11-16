@@ -1128,8 +1128,12 @@ const V3 = (() => {
         const g = grp(T8, x + dx * (12 + gap), y0, z + dz * (12 + gap)); g.rotation.y = Math.atan2(dx, dz); g.add(w);
       };
       const ex = near(H.x, slabW / 2 + 12), ez = near(H.z, slabL / 2 + 12);
-      if (ex != null) for (const s of [-1, 1]) for (const z of [-H.z[Math.floor(H.z.length / 2) + 1] || -200, H.z[Math.floor(H.z.length / 2) + 1] || 200]) peg(s * ex, z, -s, 0, ex - 12 - slabW / 2);
-      if (ez != null) for (const s of [-1, 1]) for (const x of [-(H.x.find(v => v > 0) || 50) - 100, (H.x.find(v => v > 0) || 50) + 100]) peg(x, s * ez, 0, -s, ez - 12 - slabL / 2);
+      // skutečný (nepravidelný) obrys fošny v daném místě: rawEdges(t) dává levý a pravý okraj, +4 mm zkosení hrany
+      const edgeX = (z, s) => { const e = rawEdges(clamp(z / slabL + .5, 0, 1)); return (e[s > 0 ? 1 : 0] - .5) * slabW + s * 4; };
+      const zs = H.z.filter(z => Math.abs(z) < slabL / 2 - 80), zPick = [zs[Math.floor(zs.length * .2)], zs[Math.ceil(zs.length * .8) - 1]];
+      if (ex != null) for (const s of [-1, 1]) for (const z of zPick) peg(s * ex, z, -s, 0, Math.abs(s * ex - edgeX(z, s)) - 12);   // podélné strany
+      const xs = H.x.filter(x => Math.abs(x) < slabW / 2 - 60), xPick = [xs[0], xs[xs.length - 1]];
+      if (ez != null) for (const s of [-1, 1]) for (const x of xPick) peg(x, s * ez, 0, -s, ez - 12 - slabL / 2 - 4);              // čela
       lab(T8, ex != null ? -ex : 0, y0 + kH + 10, 0, "Wooden pegs + wedges", "pegs in Ø25 holes, wedge driven between peg and workpiece · 4 sides", 8);
     }
     lab(T8, 0, slabTop, slabL / 2 - 160, `Rough slab ${slabL} × ${slabW} mm`, "live edge (bark) · surfacing with Ø39 bit", 8);
@@ -1495,7 +1499,7 @@ const V3 = (() => {
     // ===== vysavač + hadice =====
     // šibenice hadice: svislý jekl 20×20 odsazený za příčníky dvěma přivařenými jekly 20×20 délky 40 mm
     // (k hornímu i dolnímu příčníku), nahoře rameno dopředu nad vřeteno, na konci oko
-    const hTopY = c.topBeamY + 470, stub = 40, hBackZ = beamZ + bsz / 2 + stub + 10, hArmZ = frontZ - 190, hX = 0;
+    const hTopY = c.topBeamY + 470, stub = 40, hBackZ = beamZ + bsz / 2 + stub + 10, hArmZ = frontZ - 190, hX = -Math.round(p.sideSpan / 6);   // ve 1/3 šířky portálu od strany −X (strana vysavače)
     const hg = grp(Eg, 0, 0, 0);
     for (const by of [c.topBeamY, c.lowBeamY]) B(20, 20, stub, MAT.frame, hX, by, beamZ + bsz / 2 + stub / 2, hg);   // přivařené odsazení 40 mm
     B(20, hTopY - (c.lowBeamY - 10), 20, MAT.frame, hX, (hTopY + c.lowBeamY - 10) / 2, hBackZ, hg);
@@ -1540,9 +1544,13 @@ const V3 = (() => {
       const P = toR(S_hosePort), R = toR(hRing), Bk = toR(hBack), dx = P[0] - R[0];
       setHose(hoseA, [P, [P[0], P[1] + 70, P[2]], [P[0] * .7 + R[0] * .3, P[1] + (R[1] - P[1]) * .55, P[2] - 25], [R[0] + dx * .15, R[1] - 70, R[2]], R, [R[0], R[1] + 34, R[2] + 30], [Bk[0], Bk[1], Bk[2] - 60], Bk], 20);
       // ze šibenice dozadu a na stranu −X (dál od obsluhy), vně hrany stolu dolů a plynule pod stůl k vysavači
-      const gz = Bk[2], ex = -(tW / 2 + 120), zm = (gz + vIn[2]) / 2;             // ex: vně dlouhé hrany stolu na straně vysavače
-      setHose(hoseB, [Bk, [Bk[0], Bk[1] + 30, Bk[2] + 90], [Bk[0] - 200, Bk[1] - 20, gz + 170], [ex + 60, Bk[1] - 220, gz + 150], [ex, tTop + 160, zm + 40], [ex - 10, tTop - 60, zm + 60],
-        [ex - 20, legH - 160, (zm + vIn[2]) / 2], [ex - 10, vIn[1] + 110, vIn[2] - 10], [vIn[0] - 70, vIn[1] + 8, vIn[2]], vIn], 20);
+      // ze šibenice dozadu a přirozeně prověšená dolů na stranu −X (vysavač), vně dlouhé hrany stolu a pod stůl
+      const gz = Bk[2], ex = -(tW / 2 + 110), zm = (gz + vIn[2]) / 2;
+      const E0 = [Bk[0], Bk[1] + 20, Bk[2] + 110], E1 = [ex + 10, tTop + 120, zm];           // odchod ze šibenice, bod nad hranou stolu
+      const pts = [Bk, [Bk[0], Bk[1] + 25, Bk[2] + 60], E0];
+      for (let i = 1; i <= 4; i++) { const s = i / 5, b4 = 4 * s * (1 - s); pts.push([E0[0] + (E1[0] - E0[0]) * s, E0[1] + (E1[1] - E0[1]) * s - 140 * b4, E0[2] + (E1[2] - E0[2]) * s]); }
+      pts.push(E1, [ex - 5, tTop - 60, zm + 30], [ex - 20, legH - 160, (zm + vIn[2]) / 2], [ex - 10, vIn[1] + 110, vIn[2] - 10], [vIn[0] - 70, vIn[1] + 8, vIn[2]], vIn);
+      setHose(hoseB, pts, 20);
     });
     lab(Ev, -(tW / 2 + 90), tTop + 200, 0, "Vacuum hose Ø40", "shoe → holder eyelet → over gantry to side −X → outside table edge → under the table", 7);
     // senzory
