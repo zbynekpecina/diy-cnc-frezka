@@ -1113,9 +1113,8 @@ const V3 = (() => {
     makeSkin(T8, slabW, slabL, slabTop - 7, 7, slabTop - 9);      // hrubý povrch: nerovnosti 0–7 mm, frézuje se 9 mm pod horní hranu
     makeChips(T8);
     // upnutí: dřevěné kolíky v dírách desky + klíny zatlučené mezi kolík a obrobek, ze 4 stran; nic není výš než obrobek
-    { const H = M.holes, woodK = new THREE.MeshStandardMaterial({color: 0xeedcb4, roughness: .65}), woodW = new THREE.MeshStandardMaterial({color: 0x8f7a5c, roughness: .8});   // kolíky světlá bříza, klíny šedohnědý dub
+    { const H = M.holes, woodK = new THREE.MeshStandardMaterial({color: 0xd2a066, roughness: .65}), woodW = new THREE.MeshStandardMaterial({color: 0x8f7a5c, roughness: .8});   // kolíky buk, klíny šedohnědý dub
       const kH = Math.max(15, p.workT - 6), y0 = p.frameH + deckT;
-      const near = (arr, v) => arr.filter(a => a > v).sort((a, b) => a - b)[0];
       const peg = (x, z, dx, dz, gap) => {                                     // kolík Ø24 + klín ve směru (dx, dz) k obrobku
         Cy(12, kH + 20, woodK, x, y0 + (kH - 20) / 2, z, "y", T8, 16);         // 20 mm v díře, nahoře kH nad deskou
         if (gap < 4) return;
@@ -1127,14 +1126,23 @@ const V3 = (() => {
         const w = new THREE.Mesh(geo, woodW); w.castShadow = true;
         const g = grp(T8, x + dx * (12 + gap), y0, z + dz * (12 + gap)); g.rotation.y = Math.atan2(dx, dz); g.add(w);
       };
-      const ex = near(H.x, slabW / 2 + 12), ez = near(H.z, slabL / 2 + 12);
-      // skutečný (nepravidelný) obrys fošny v daném místě: rawEdges(t) dává levý a pravý okraj, +4 mm zkosení hrany
+      // skutečný (nepravidelný) obrys fošny: rawEdges(t) dává levý a pravý okraj, +4 mm zkosení hrany
       const edgeX = (z, s) => { const e = rawEdges(clamp(z / slabL + .5, 0, 1)); return (e[s > 0 ? 1 : 0] - .5) * slabW + s * 4; };
-      const zs = H.z.filter(z => Math.abs(z) < slabL / 2 - 80), zPick = [zs[Math.floor(zs.length * .2)], zs[Math.ceil(zs.length * .8) - 1]];
-      if (ex != null) for (const s of [-1, 1]) for (const z of zPick) peg(s * ex, z, -s, 0, Math.abs(s * ex - edgeX(z, s)) - 12);   // podélné strany
-      const xs = H.x.filter(x => Math.abs(x) < slabW / 2 - 60), xPick = [xs[0], xs[xs.length - 1]];
-      if (ez != null) for (const s of [-1, 1]) for (const x of xPick) peg(x, s * ez, 0, -s, ez - 12 - slabL / 2 - 4);              // čela
-      lab(T8, ex != null ? -ex : 0, y0 + kH + 10, 0, "Wooden pegs + wedges", "pegs in Ø25 holes, wedge driven between peg and workpiece · 4 sides", 8);
+      const R = 12, gMin = 6, gMax = 60;                                        // kolík Ø24, klín 6–40 mm v místě kolíku
+      // pro každou stranu: nejbližší díra za okrajem obrobku, jen kde klín vyjde rozumně; 2 místa co nejdál od sebe
+      const pick = cands => { const ok = cands.filter(c => c.gap >= gMin && c.gap <= gMax); return ok.length < 2 ? ok : [ok[0], ok[ok.length - 1]]; };
+      let nPeg = 0;
+      for (const s of [-1, 1]) {                                                // podélné strany (±X)
+        const c2 = H.z.filter(z => Math.abs(z) < slabL / 2 - 60).map(z => { const e = edgeX(z, s), hx = H.x.filter(x => s * x > s * e + R + gMin).sort((a, b) => s * (a - b))[0]; return hx == null ? null : {z, hx, gap: Math.abs(hx - e) - R}; }).filter(Boolean);
+        for (const c of pick(c2)) { peg(c.hx, c.z, -s, 0, c.gap); nPeg++; }
+      }
+      for (const s of [-1, 1]) {                                                // čela (±Z): rovná hrana
+        const e = s * (slabL / 2 + 4), hz = H.z.filter(z => s * z > s * e + R + gMin).sort((a, b) => s * (a - b))[0];
+        if (hz == null) continue;
+        const c2 = H.x.filter(x => Math.abs(x) < slabW / 2 - 60).map(x => ({x, gap: Math.abs(hz - e) - R}));
+        for (const c of pick(c2)) { peg(c.x, hz, 0, -s, c.gap); nPeg++; }
+      }
+      if (nPeg) lab(T8, -(slabW / 2 + 40), y0 + kH + 10, 0, "Wooden pegs + wedges", "pegs in Ø25 holes, wedge driven sideways between peg and workpiece", 8);
     }
     lab(T8, 0, slabTop, slabL / 2 - 160, `Rough slab ${slabL} × ${slabW} mm`, "live edge (bark) · surfacing with Ø39 bit", 8);
     // ===== 2 vedení Y – SBR20 na bočních profilech =====

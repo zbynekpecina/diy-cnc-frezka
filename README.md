@@ -5,7 +5,9 @@
 **Interaktivní 3D plánovač stavby portálové CNC frézky**<br>
 model podle skutečných rozměrů dílů · animace frézování · kalkulace · schémata zapojení · dokumentace
 
-[![Živá ukázka](https://img.shields.io/badge/živá_ukázka-GitHub_Pages-0f9d8a?style=flat-square)](https://zbynekpecina.github.io/diy-cnc-frezka/)
+<a href="https://zbynekpecina.github.io/diy-cnc-frezka/"><img src="https://img.shields.io/badge/▶%20DEMO-otevřít%20v%20prohlížeči-0f9d8a?style=for-the-badge" alt="Otevřít živé demo" height="46"></a>
+
+
 [![Licence MIT](https://img.shields.io/badge/licence-MIT-555?style=flat-square)](LICENSE)
 ![three.js](https://img.shields.io/badge/three.js-r128-111?style=flat-square&logo=threedotjs)
 ![Python](https://img.shields.io/badge/Python-3.9+-3776ab?style=flat-square&logo=python&logoColor=white)
@@ -103,7 +105,7 @@ Celá aplikace je **jeden HTML soubor bez frameworku**. Funguje offline, na mobi
 
 ### Bez instalace
 
-Otevři **[živou ukázku](https://zbynekpecina.github.io/diy-cnc-frezka/)**. Úpravy se ukládají do prohlížeče a jdou exportovat v Nastavení.
+Otevři **[živé demo](https://zbynekpecina.github.io/diy-cnc-frezka/)**. Úpravy se ukládají do prohlížeče a jdou exportovat v Nastavení.
 
 ### Lokálně
 
