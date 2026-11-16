@@ -2,7 +2,7 @@
 
 Srovnání materiálů rámu a portálu, dodavatelů hliníkových profilů a orientační tuhosti průřezů. Rešerše z 15. 11. 2026.
 
-> **Aktuální stav:** Stavíme variantu Custom. Základ tvoří stávající spodní konstrukce z hliníkových solárních profilů 40×40 s deskou 1800×750 mm na dřevěném stole. Portál je ze svařených jeklů 25×25, pod kolejnice a na vozíky je pásovina 50×6, vozík X je z plexiskla 300×200×10 mm. Pracovní plocha je cca 1 550 × 680 mm, materiál dřevo.
+> **Aktuální stav:** Stavíme variantu Custom1. Základ tvoří stávající spodní konstrukce z hliníkových solárních profilů 40×40 s deskou 1800×750 mm na dřevěném stole. Portál je ze svařených jeklů 25×25, pod kolejnice a na vozíky je pásovina 50×6, vozík X je z plexiskla 300×200×10 mm. Pracovní plocha je cca 1 550 × 680 mm, materiál dřevo.
 
 Rešerše počítala s plochou 600×900 mm. Pro velký stroj (~1400×2000 mm) platí stejné principy s průřezy o stupeň většími. Značka [neověřeno] znamená, že cenu nebo údaj se nepodařilo ověřit.
 

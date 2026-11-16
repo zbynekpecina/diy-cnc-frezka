@@ -15,7 +15,7 @@ Dokumentace stavby levné portálové CNC frézky na dřevo. Obsahuje návrh str
 
 | Stránka | Obsah |
 |---|---|
-| [Custom](navrh/nas-navrh.md) | aktuální návrh stroje, kontroly rozměrů, co chybí |
+| [Custom1 a Custom2](navrh/nas-navrh.md) | aktuální návrh stroje, kontroly rozměrů, co chybí |
 | [Rozhodnutí](navrh/rozhodnuti.md) | přehled rozhodnutí a jejich důvody |
 | [Koncept v2](navrh/koncept-v2.md) | první koncept velkého stroje a otevřené otázky |
 | [Prototyp v1](navrh/prototyp-v1.md) | původní ruční prototyp a proč nejezdí rovně |

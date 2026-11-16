@@ -4,7 +4,7 @@ Rešerše komunitních a komerčních stavebnic z 15. 11. 2026: konstrukce, vede
 
 > **Poznámka:** Rešerše počítala s plochou cca 600 × 900 mm. Náčrt a [favoritní fotografie](favorit-ocelovy-portal.md) ukazovaly velký stroj cca 1400 × 2000 mm. U velkého stroje se mění hlavně pohon X/Y: šrouby delší než cca 1,5 m kmitají, proto řemen nebo hřeben (viz Poučení komunity, bod 5).
 >
-> **Aktuální stav:** [návrh Custom](../navrh/nas-navrh.md) má pracovní plochu cca 1550 × 680 mm (dřevo), vedení SBR20 a pohon řemenem GT2.
+> **Aktuální stav:** [návrh Custom1](../navrh/nas-navrh.md) má pracovní plochu cca 1550 × 680 mm (dřevo), vedení SBR20 a pohon řemenem GT2.
 
 Legenda: ❓ = nejisté nebo neověřené. Ceny jsou orientační (1 USD ≈ 23 Kč, 1 EUR ≈ 25 Kč, 1 GBP ≈ 29 Kč).
 
@@ -138,4 +138,4 @@ Legenda: ❓ = nejisté nebo neověřené. Ceny jsou orientační (1 USD ≈ 23 
 
 **Nedoporučeno:** MPCNC, Maslow a stroje na kolečkách (LEAD, WorkBee, LongMill MK2). Mají stejné omezení jako dosavadní prototyp.
 
-> **Aktuální stav:** Zvolen vlastní [návrh Custom](../navrh/nas-navrh.md): portál ze svařených jeklů 25×25 na stávající spodní konstrukci, vedení SBR20, osa Z jako hotový modul s kuličkovým šroubem Ø16, FluidNC na klasickém ESP32.
+> **Aktuální stav:** Zvolen vlastní [návrh Custom1](../navrh/nas-navrh.md): portál ze svařených jeklů 25×25 na stávající spodní konstrukci, vedení SBR20, osa Z jako hotový modul s kuličkovým šroubem Ø16, FluidNC na klasickém ESP32.

@@ -4,7 +4,7 @@ Rozbor stroje z komunitní fotografie: svařovaný ocelový portál s vodou chla
 
 Zdroj: obrázek z komunity (video, text „vrátit a objednat si“), autor neznámý.
 
-> **Aktuální stav (15. 11. 2026):** Z tohoto vzoru [návrh Custom](../navrh/nas-navrh.md) převzal svařený portál z jeklů (25×25), pohon řemenem a rozdělení stavby na etapy. Místo HGR20 je na obou osách SBR20, místo vodou chlazeného vřetena je objednáno vzduchem chlazené HLTNC 2,2 kW ER20.
+> **Aktuální stav (15. 11. 2026):** Z tohoto vzoru [návrh Custom1](../navrh/nas-navrh.md) převzal svařený portál z jeklů (25×25), pohon řemenem a rozdělení stavby na etapy. Místo HGR20 je na obou osách SBR20, místo vodou chlazeného vřetena je objednáno vzduchem chlazené HLTNC 2,2 kW ER20.
 
 ## Rozbor fotografie
 

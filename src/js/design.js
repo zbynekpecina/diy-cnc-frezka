@@ -1,7 +1,7 @@
 /* =====================================================================
    NÁŠ NÁVRH – parametry, kontrolní výpočty, kusovník
    ===================================================================== */
-const NAS_DEF = {deckL: 1800, deckW: 750, workL: 1700, workW: 700, workT: 40, frameH: 790, sideSpan: 790, rodGap: 50, railY: 1800, blockSpacing: 200, postH: 275, postSize: 25, beamL: 1000, beamSize: 25, beamGap: 150, railX: 1000, plexiW: 300, plexiH: 200, plexiT: 10, plexiEdge: 15, zStroke: 200, zOffset: 0};
+const NAS_DEF = {deckL: 1800, deckW: 750, workL: 1500, workW: 600, workT: 40, frameH: 790, sideSpan: 790, rodGap: 50, railY: 1800, blockSpacing: 200, postH: 275, postSize: 25, beamL: 1000, beamSize: 25, beamGap: 150, railX: 1000, plexiW: 300, plexiH: 200, plexiT: 10, plexiEdge: 15, zStroke: 200, zOffset: 0};
 const PARAM_INFO = {
   nas: [
     ["Stůl a spodní konstrukce (máme)", [["deckL", "Délka desky stolu"], ["deckW", "Šířka desky stolu"], ["frameH", "Výška spodního rámu"], ["sideSpan", "Rozteč bočních profilů (nad spodními)"], ["rodGap", "Rozpěrka na závitové tyči (0–100)"]]],
@@ -86,7 +86,7 @@ function bomNas(p) {
   ];
 }
 const NAS_VARIANT = {
-  id: "nas", name: "Custom", short: "Custom", color: "#0f9d8a",
+  id: "nas", name: "Custom2", short: "Custom2", color: "#7c3aed",
   get area() { const p = getParams(this); return [Math.min(p.workW, p.deckW), Math.min(p.workL, p.deckL)]; },
   tags: ["svařené jekly 25×25", "SBR20 na obou osách", "vozík X z plexiskla", "hotový modul Z"],
   desc: "Stávající spodní konstrukce z **hliníkových solárních profilů 40×40** s deskou 1 800 × 750 mm leží na dřevěném stole a zůstává beze změny. Výška a rovinnost se nastavují **závitovými tyčemi Ø25**. Na boční profily se přišroubuje vedení **SBR20 1 800 mm**. Na každé straně jsou dva vozíky spojené pásovinou a **jeklem 25×25**, na zadním je svislá stojka a vzpěra vede od předního. Dva **příčníky 25×25** svařené mezi stojkami tvoří s nimi jeden rám a nesou vedení **SBR20 1 000 mm**. Čtyři vozíky osy X spojuje deska z **plexiskla 300 × 200 × 10 mm**, na ní je **hotový modul osy Z** a přes hliníkový adaptér **vřeteno 2,2 kW**.",
@@ -110,11 +110,11 @@ const NAS_VARIANT = {
 /* Custom2: boční profily se rozeberou a přeloží vedle podélných spodních profilů (ve stejné rovině). Kolejnice SBR20
    (podpěra 45 mm) pak leží na dvojici profilů 40 + 40 mm, odpadají závitové tyče v rozích a celý portál je níž. */
 const NAS2_VARIANT = {
-  id: "nas2", name: "Custom2", short: "Custom2", color: "#7c3aed",
+  id: "nas2", name: "Custom1", short: "Custom1", color: "#0f9d8a",
   get area() { const p = getParams(this); return [Math.min(p.workW, p.deckW), Math.min(p.workL, p.deckL)]; },
   tags: ["boční profily vedle spodních", "opora kolejnice 80 mm", "bez závitových tyčí", "nižší portál"],
-  desc: "Varianta Custom s jinou spodní částí. Boční profily se rozeberou a přišroubují **vedle podélných spodních profilů 40×40** ve stejné rovině. Kolejnice **SBR20** (podpěra 45 mm) tak leží na dvojici profilů o šířce **80 mm**, ne na jediném profilu 40 mm. Odpadají **závitové tyče a rozpěrky** v rozích a vedení je o 90 mm níž. Stojky portálu jsou o tolik delší, aby fréza dál dojela na desku. Na spodní konstrukci zůstává podkladová deska, na kterou se klade obrobek.",
-  pros: ["Kolejnice leží celou šířkou podpěry na dvou profilech", "Odpadá rovnání čtyř závitových tyčí", "Nižší a tužší spodní část", "Ostatní díly stejné jako Custom"],
+  desc: "Stávající spodní konstrukce z **hliníkových solárních profilů 40×40** s deskou 1 800 × 750 mm leží na dřevěném stole. Boční profily se rozeberou a přišroubují **vedle podélných spodních profilů** ve stejné rovině. Kolejnice **SBR20** (podpěra 45 mm) tak leží na dvojici profilů o šířce **80 mm**, ne na jediném profilu 40 mm. Odpadají **závitové tyče a rozpěrky** v rozích a vedení je o 90 mm níž. Portál ze svařených **jeklů 25×25** se stojkami 370 mm nese vedení **SBR20 1 000 mm**, vozík X z **plexiskla 300 × 200 × 10 mm**, **hotový modul osy Z** a **vřeteno 2,2 kW**. Na spodní konstrukci zůstává podkladová deska, na kterou se klade obrobek.",
+  pros: ["Kolejnice leží celou šířkou podpěry na dvou profilech", "Odpadá rovnání čtyř závitových tyčí", "Nižší a tužší spodní část", "Šířka frézování 719 mm – obrobek 700 mm se vejde"],
   cons: ["Spodní konstrukci je potřeba rozebrat a přeskládat", "Delší stojky portálu (větší páka)", "Rovinnost kolejnic závisí na rovinnosti spodní konstrukce – podložit"],
   score: {tuhost: 3, presnost: 2, hlinik: 1, narocnost: 2, cas: 2, rozsir: 3},
   p3: {style: "nas", flat: true, def: {flat: 1, sideSpan: 830, rodGap: 0, postH: 370}},
@@ -124,7 +124,7 @@ const NAS2_VARIANT = {
     ...NAS_VARIANT.steps.slice(1),
   ],
 };
-VARIANTS.unshift(NAS_VARIANT, NAS2_VARIANT);
+VARIANTS.unshift(NAS2_VARIANT, NAS_VARIANT);
 const VBY = Object.fromEntries(VARIANTS.map(v => [v.id, v]));
 const SCORE_L = {tuhost: "Tuhost", presnost: "Přesnost", hlinik: "Hliník", narocnost: "Náročnost stavby", cas: "Čas stavby", rozsir: "Rozšiřitelnost"};
 

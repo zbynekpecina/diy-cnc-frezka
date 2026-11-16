@@ -22,7 +22,7 @@ let closingByRoute = false;
 window.addEventListener("hashchange", route);
 document.addEventListener("click", e => {
   const g = e.target.closest("[data-go]"); if (g) { go(g.dataset.go); }
-  const tb = e.target.closest(".tab"); if (tb) { if (tb.dataset.v3 && S.variant !== "nas") { S.variant = "nas"; save(); } go(tb.dataset.v3 ? "varianta/" + S.variant : tb.dataset.tab); }
+  const tb = e.target.closest(".tab"); if (tb) { if (tb.dataset.v3 && !VBY[S.variant]) { S.variant = "nas2"; save(); } go(tb.dataset.v3 ? "varianta/" + S.variant : tb.dataset.tab); }
 });
 
 /* =====================================================================
@@ -59,4 +59,4 @@ document.addEventListener("click", e => {
   const b = e.target.closest("[data-sel]"); if (b) { e.stopPropagation(); toggleSel(b.dataset.sel); }
 });
 
-function vcardHTML(v, on) { return `<button class="pill ${on ? "on" : ""}" data-v="${v.id}" style="--c:${v.color}"><i></i>${v.id === "nas" ? "⭐ " : ""}${esc(v.short)}<small>${kc(bomTotal(v, "ess"))}</small></button>`; }
+function vcardHTML(v, on) { return `<button class="pill ${on ? "on" : ""}" data-v="${v.id}" style="--c:${v.color}"><i></i>${v.id === "nas2" ? "⭐ " : ""}${esc(v.short)}<small>${kc(bomTotal(v, "ess"))}</small></button>`; }

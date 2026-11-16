@@ -1,4 +1,4 @@
-# Custom
+# Custom1 a Custom2
 
 Portálová frézka ze svařených jeklů 25×25 postavená na stávajícím stole. Cílem je co nejlevnější stroj na srovnávání a frézování dřeva. Parametrický 3D model s kótami, kontrolami a kusovníkem je v záložce **3D model**.
 
@@ -18,6 +18,10 @@ Portálová frézka ze svařených jeklů 25×25 postavená na stávajícím sto
 - Spodní konstrukce z hliníkových solárních profilů 40×40 s deskou 1 800 × 750 mm už existuje. Leží volně na dřevěném stole.
 - Boční profily 1 800 mm nesou vedení Y a leží nad podélnými spodními profily.
 - Výška a rovinnost se nastavují v rozích závitovými tyčemi Ø25. Tyč vede z odřezku jeklu vedle spodního profilu do jeklu 100 mm na boku bočního profilu. Mezi profily je rozpěrka z odřezku profilu, nahoře matice.
+
+### Upínání obrobku
+
+Podkladová deska má díry Ø25 v rastru 100 mm napříč a 200 mm podél. Obrobek se upíná dřevěnými kolíky v dírách a klíny zatlučenými mezi kolík a obrobek ze čtyř stran. Kolík ani klín nejsou výš než obrobek, takže nepřekážejí frézování.
 
 ### Osa Y
 
@@ -46,17 +50,21 @@ Portálová frézka ze svařených jeklů 25×25 postavená na stávajícím sto
 - HLTNC 2,2 kW GDZ80x73 ER20, 24 000 ot/min, chlazení vzduchem, s měničem EV210 (1F 230 V, RS485). Objednáno 15. 11. 2026 za 4 053 Kč.
 - Kleštiny ani klíč ER20 nejsou v sadě. Dokoupit kleštinu 8 mm (srovnávací fréza Ø39 už je koupená) a klíč ER20A.
 
-## Varianta Custom2
+## Custom1 a Custom2
 
-Obavou u varianty Custom je opora kolejnic: podpěra SBR20 je široká 45 mm, boční profil jen 40 mm. Custom2 proto mění spodní část:
+Návrh má dvě varianty spodní části. Portál, osa X, osa Z, vřeteno a elektronika jsou u obou stejné.
 
-- boční profily se rozeberou a přišroubují **vedle podélných spodních profilů** ve stejné rovině,
-- kolejnice leží na dvojici profilů o šířce **80 mm** (osa kolejnice na spáře profilů),
-- odpadají závitové tyče a rozpěrky v rozích, vedení je o 90 mm níž,
-- stojky portálu se prodlouží na 370 mm, aby fréza dál dojela na desku,
-- rozteč kolejnic Y je 830 mm, šířka frézování vychází 719 mm.
+| | Custom1 (hlavní) | Custom2 |
+|---|---|---|
+| Boční profily | vedle podélných spodních profilů, ve stejné rovině | nad spodními profily na rozpěrkách |
+| Opora kolejnice SBR20 (podpěra 45 mm) | dvojice profilů, 80 mm | jeden profil, 40 mm |
+| Seřízení výšky | podložky pod profily | závitové tyče Ø25 v rozích |
+| Výška vedení | o 90 mm níž | výchozí |
+| Stojky portálu | 370 mm | 285 mm |
+| Rozteč kolejnic Y | 830 mm | 790 mm |
+| Šířka frézování | 719 mm | 679 mm |
 
-Na spodní konstrukci zůstává podkladová deska, na kterou se klade obrobek. Obě varianty jsou v 3D modelu a mají vlastní výrobní výkresy.
+Custom1 vznikl kvůli opoře kolejnic: podpěra SBR20 je široká 45 mm a jediný profil jen 40 mm. Na spodní konstrukci zůstává podkladová deska, na kterou se klade obrobek. Popis konstrukce výše odpovídá variantě Custom2, u Custom1 platí změny z tabulky.
 
 ## Pohony a elektronika
 
@@ -73,7 +81,7 @@ Stroj se staví nejdřív bez motorů. Motorizace přijde ve druhé fázi.
 | Odsávání | výstup M8 → relé → stykač zásuvky vysavače |
 | Čidla | mechanické koncové spínače NC (home X a Y na minimu), indukční M12 nahoře na ose Z |
 
-Rozvaděč je zavěšený pod deskou stolu na dvou pásovinách, dvířka ven. Vysavač stojí pod stolem. Displej je na obráceném L z jeklu 25×25, který navazuje na rohový jekl motoru Y1. Držák hadice vysavače je uprostřed horního příčníku.
+Rozvaděč je zavěšený pod deskou stolu na straně displeje (+X), dvířka ven. Kabelové řetězy X a Y, kabely po portálu a hadice vysavače vedou na opačné straně (−X), aby nepřekážely obsluze. Hadice nemá šibenici: vede od nástavce přes objímku na vozíku X, volnou smyčkou k objímkám na stojce −X, k pevnému bodu na hraně stolu a plynule pod stůl k vysavači. Displej je na obráceném L z jeklu 25×25, který navazuje na rohový jekl motoru Y2.
 
 Podrobné zapojení je v záložce **Zapojení**, rozměry dílů v **3D model → Výrobní výkresy a řezný plán**.
 

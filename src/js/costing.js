@@ -6,7 +6,7 @@ function allDesigns() { return [...VARIANTS, ...(S.designs || []).map(designObj)
 function renderNavrh() {
   const el = $("#v-navrh");
   const list = allDesigns(), mode = S.bomMode || "need";
-  if (S.navTab !== "moje" && !list.find(d => d.id === S.navTab)) S.navTab = "nas";
+  if (S.navTab !== "moje" && !list.find(d => d.id === S.navTab)) S.navTab = "nas2";
   el.innerHTML = `<div class="pagehead"><h2>Kalkulace</h2><button class="btn primary sm" id="nNew">＋ Vlastní návrh</button></div>
   <div class="navtabs">${list.map(d => `<button class="pill ${S.navTab === d.id ? "on" : ""}" data-nt="${d.id}" style="--c:${d.color}"><i></i>${esc(d.short)}<small>${kc(bomTotal(d, mode))}</small></button>`).join("")}<button class="pill ${S.navTab === "moje" ? "on" : ""}" data-nt="moje">🛒 Můj výběr<small>${kc(cartTotal())}</small></button></div>
   <div id="ncont"></div>`;
@@ -24,7 +24,7 @@ function renderNavrh() {
   $("#dCopy").onclick = () => { const nd = {id: "d" + Date.now(), name: d.short + " – kopie", bom: bomLines(d).map(l => ({k: l.k, n: l.n, q: l.q, p: l.p, u: l.u, ref: l.ref, est: l.est, note: l.note, off: l.off ? 1 : 0}))}; (S.designs = S.designs || []).push(nd); S.navTab = nd.id; save(); renderNavrh(); toast("Vytvořena kopie – můžeš ji upravovat"); };
   if (d.custom) {
     $("#dRen").onclick = () => { const n = prompt("Název návrhu", d.name); if (n) { d.custom.name = n; save(); renderNavrh(); } };
-    $("#dDel").onclick = () => { if (!confirmInline("dDel", "Smazat")) return; S.designs = S.designs.filter(x => x.id !== d.id); S.navTab = "nas"; save(); renderNavrh(); };
+    $("#dDel").onclick = () => { if (!confirmInline("dDel", "Smazat")) return; S.designs = S.designs.filter(x => x.id !== d.id); S.navTab = "nas2"; save(); renderNavrh(); };
   }
 }
 function renderMyCart(box) {
