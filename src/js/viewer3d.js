@@ -1120,9 +1120,13 @@ const V3 = (() => {
       const peg = (x, z, dx, dz, gap) => {                                     // kolík Ø24 + klín ve směru (dx, dz) k obrobku
         Cy(12, kH + 20, woodK, x, y0 + (kH - 20) / 2, z, "y", T8, 16);         // 20 mm v díře, nahoře kH nad deskou
         if (gap < 4) return;
-        const sh = new THREE.Shape(); sh.moveTo(0, 0); sh.lineTo(mm(gap), 0); sh.lineTo(mm(gap * .55), mm(kH - 4)); sh.lineTo(0, mm(kH - 4)); sh.closePath();
-        const w = new THREE.Mesh(new THREE.ExtrudeGeometry(sh, {depth: mm(36), bevelEnabled: false}), woodW); w.castShadow = true;
-        const g = grp(T8, x + dx * 12, y0, z + dz * 12); g.rotation.y = Math.atan2(-dz, dx); g.add(w); w.position.z = -mm(18);
+        // klín leží naplocho na desce a zatlouká se z boku (podél hrany obrobku) mezi kolík a obrobek:
+        // v půdorysu je to klínový trojúhelník, uprostřed (u kolíku) má tloušťku = mezera
+        const L = 110, hW = Math.min(kH - 4, 22), sh = new THREE.Shape();
+        sh.moveTo(mm(-L / 2), 0); sh.lineTo(mm(L / 2), 0); sh.lineTo(mm(L / 2), mm(gap * .35)); sh.lineTo(mm(-L / 2), mm(gap * 1.65)); sh.closePath();
+        const geo = new THREE.ExtrudeGeometry(sh, {depth: mm(hW), bevelEnabled: false}); geo.rotateX(-Math.PI / 2);
+        const w = new THREE.Mesh(geo, woodW); w.castShadow = true;
+        const g = grp(T8, x + dx * (12 + gap), y0, z + dz * (12 + gap)); g.rotation.y = Math.atan2(dx, dz); g.add(w);
       };
       const ex = near(H.x, slabW / 2 + 12), ez = near(H.z, slabL / 2 + 12);
       if (ex != null) for (const s of [-1, 1]) for (const z of [-H.z[Math.floor(H.z.length / 2) + 1] || -200, H.z[Math.floor(H.z.length / 2) + 1] || 200]) peg(s * ex, z, -s, 0, ex - 12 - slabW / 2);
