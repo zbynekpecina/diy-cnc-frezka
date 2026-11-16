@@ -1113,7 +1113,7 @@ const V3 = (() => {
     makeSkin(T8, slabW, slabL, slabTop - 7, 7, slabTop - 9);      // hrubý povrch: nerovnosti 0–7 mm, frézuje se 9 mm pod horní hranu
     makeChips(T8);
     // upnutí: dřevěné kolíky v dírách desky + klíny zatlučené mezi kolík a obrobek, ze 4 stran; nic není výš než obrobek
-    { const H = M.holes, woodK = new THREE.MeshStandardMaterial({color: 0xc9a06a, roughness: .7}), woodW = new THREE.MeshStandardMaterial({color: 0xb0864f, roughness: .75});
+    { const H = M.holes, woodK = new THREE.MeshStandardMaterial({color: 0xeedcb4, roughness: .65}), woodW = new THREE.MeshStandardMaterial({color: 0x8f7a5c, roughness: .8});   // kolíky světlá bříza, klíny šedohnědý dub
       const kH = Math.max(15, p.workT - 6), y0 = p.frameH + deckT;
       const near = (arr, v) => arr.filter(a => a > v).sort((a, b) => a - b)[0];
       const peg = (x, z, dx, dz, gap) => {                                     // kolík Ø24 + klín ve směru (dx, dz) k obrobku
