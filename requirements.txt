@@ -1,5 +1,5 @@
 # Jen pro sestavení webu (tools/build.py): náhledy obrázků a ikonky dílů.
 # Server (tools/server.py) žádné závislosti nemá.
 pillow>=10
-numpy>=1.26
+numpy>=2.5.4
 scipy>=1.11
