@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="cs">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CNC frézka</title>
+<meta name="description" content="Plánovač DIY CNC frézky: 3D model s animací, kalkulace, schémata zapojení a dokumentace.">
+<meta name="color-scheme" content="light dark">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;650;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23f5a524'/%3E%3Cpath d='M14 46h36M18 46V22h28v24M28 22v10h8V22M32 32v8' stroke='%2314171c' stroke-width='5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E">
+<!-- @css -->
+</head>
+<body>
+<header class="topbar">
+  <div class="topbar-in">
+    <div class="brand" data-go="varianty">
+      <div class="logo"><svg viewBox="0 0 24 24" fill="none" stroke="#1b1300" stroke-width="2.6" stroke-linecap="round"><path d="M3 20h18M5 20V7h14v13M10 7v5h4V7M12 12v4"/></svg></div>
+      <span>CNC frézka</span>
+    </div>
+    <nav class="tabs" id="tabs">
+      <button class="tab" data-tab="varianty" data-v3="1">3D model</button>
+      <button class="tab" data-tab="navrh">Kalkulace</button>
+      <button class="tab" data-tab="zapojeni">Zapojení</button>
+      <button class="tab" data-tab="produkty">Produkty</button>
+      <button class="tab" data-tab="wiki">Wiki</button>
+      <button class="tab" data-tab="kalkulacky">Výpočty</button>
+    </nav>
+    <div class="top-actions">
+      <span class="viewchip hidden" id="viewChip" title="Účet jen pro prohlížení: model, animace a výpočty fungují, změny se neukládají">Jen prohlížení</span>
+      <span class="sync" id="syncDot" data-s="local"></span>
+      <div class="chip-cart hidden" data-go="navrh" title="Můj výběr"><span id="cartChip">0 Kč</span></div>
+      <a class="ghbtn" href="https://github.com/zbynekpecina/diy-cnc-frezka" target="_blank" rel="noopener" title="Zdrojový kód na GitHubu"><svg viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg><span>GitHub</span></a>
+      <button class="iconbtn" id="themeBtn" title="Světlý / tmavý motiv"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8.5"/><path d="M12 3.5v17a8.5 8.5 0 0 0 0-17z" fill="currentColor"/></svg></button>
+      <button class="iconbtn" data-go="nastaveni" title="Nastavení a záloha"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg></button>
+      <a class="iconbtn hidden" id="logoutBtn" href="/logout" title="Odhlásit"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9"/></svg></a>
+    </div>
+  </div>
+</header>
+
+<main>
+  <section class="view" id="v-wiki"></section>
+  <section class="view" id="v-produkty"></section>
+  <section class="view" id="v-varianty"></section>
+  <section class="view" id="v-navrh"></section>
+  <section class="view" id="v-kalkulacky"></section>
+  <section class="view" id="v-zapojeni"></section>
+  <section class="view" id="v-nastaveni"></section>
+</main>
+
+<div class="modal" id="modal"><div class="mbox" id="mbox"></div></div>
+<div class="lightbox" id="lightbox"><img id="lbImg" alt=""><button class="x" title="Zavřít" aria-label="Zavřít">✕</button><button class="l" aria-label="Předchozí">‹</button><button class="r" aria-label="Další">›</button><div class="cap" id="lbCap"></div></div>
+<div class="toast" id="toast"></div>
+
+<!-- @vendor -->
+<!-- @data -->
+<!-- @js -->
+</body>
+</html>

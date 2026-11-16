@@ -1,0 +1,19 @@
+# Soukromé a běhové soubory – nikdy do repa
+/private/
+/data/
+/web/
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+
+# Nástroje a OS
+.playwright-mcp/
+.vscode/
+.idea/
+Thumbs.db
+.DS_Store
+
+# Docker
+.env

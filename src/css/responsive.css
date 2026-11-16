@@ -1,0 +1,51 @@
+@media (max-width:1240px){.wiki{grid-template-columns:220px minmax(0,1fr);gap:32px}.wtoc{display:none}}
+@media (max-width:1100px){.mgrid{grid-template-columns:1fr}}
+@media (max-width:860px){
+  .wiki{grid-template-columns:1fr;gap:12px}
+  .wside{position:static;max-height:none;padding:0}
+  #wnav{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;padding-bottom:4px}
+  #wnav::-webkit-scrollbar{display:none}
+  .wgroup{display:contents}
+  .wgroup-h{display:none}
+  .wdoc{flex:none;border:1px solid var(--line);border-radius:999px;padding:4px 10px;font-size:13px}
+  .wdoc.active{border-color:var(--text)}
+  .wtitle{font-size:26px}
+  .wpn{grid-template-columns:1fr}
+}
+@media (max-width:640px){
+  main{padding:14px 14px 48px}
+  .fields,.proscons{grid-template-columns:1fr}
+  .calcs{grid-template-columns:1fr}
+  .pricebox{grid-template-columns:1fr 1fr}
+  .bars .row{grid-template-columns:110px 1fr 34px}
+}
+@media print{.topbar,.filters,.vtool,.btn,.selbtn{display:none!important}body{background:#fff}main{padding:0}.view{display:none!important}.view.print{display:block!important}}
+@media (max-width:700px){
+  .pills{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;margin:0 -14px 10px;padding:0 14px}
+  .pills::-webkit-scrollbar{display:none}
+  .pill{flex:none}
+  .viewer-wrap{height:72vh;min-height:380px;border-radius:14px}
+  .vhud{left:8px;top:8px;gap:4px}
+  .vhud .box{padding:5px 8px;font-size:11px;border-radius:9px}
+  .vhud .title{font-size:12px}
+  .steplabel{top:auto;bottom:64px;right:8px;left:8px;max-width:none;font-size:12px;padding:6px 10px}
+  .vhud{display:none!important}                                   /* mobil: bez karty se souřadnicemi */
+  .steplabel{bottom:52px}
+  .vtool{left:6px;right:6px;bottom:6px;padding:4px;gap:3px;flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;border-radius:12px;justify-content:space-between}
+  .vtool::-webkit-scrollbar{display:none}
+  .vtool .grp{gap:4px;flex:none}
+  .vtool .sep,.vtool .speed,.vtool label,.vtool .t,.vtool > div[style*="flex:1"],.vtool .gstep,#bReset,#bCol,#bHud,#bDim{display:none!important}
+  .vtool button{padding:0;width:30px;min-width:30px!important;height:30px;font-size:14px;flex:none;display:grid;place-items:center}
+  .vtool select{max-width:72px;font-size:11px;padding:5px 2px;flex:none}
+  .v3lab{font-size:10px;padding:2px 6px}.v3lab small{display:none}
+  .v3dim{font-size:10px;padding:1px 5px}.v3dim small{display:none}
+  .vhint .desk{display:none}.vhint .mob{display:inline}
+  .vbar{padding:12px}.vbar-p b{font-size:17px}
+  .topbar{height:auto}
+  .topbar-in{flex-wrap:wrap;gap:0 8px;padding:0 12px}
+  .brand{height:46px}
+  .top-actions{margin-left:auto}
+  .tabs{order:3;flex-basis:100%;height:40px;margin:0 -12px;padding:0 4px;border-top:1px solid var(--line)}
+  .tab{padding:0 9px;font-size:13.5px}
+  .tab.active::after{left:9px;right:9px}
+}

@@ -1,0 +1,37 @@
+/* Barvy, typografie a rozměry. Tmavý motiv: podle systému nebo přepínačem (data-theme). */
+:root{
+  --bg:#fafafa; --bg2:#f1f1f3; --panel:#ffffff; --panel2:#f7f7f8; --line:#e7e7eb; --line2:#d9d9df;
+  --text:#18181b; --muted:#55555e; --faint:#8a8a94;
+  --accent:#d97706; --accent2:#f59e0b; --accentbg:#fff7e8; --teal:#0f9d8a; --tealbg:#e3f5f1;
+  --ok:#15803d; --okbg:#eaf7ee; --warn:#b45309; --warnbg:#fff4e0; --bad:#c2410c; --badbg:#fdeee8;
+  --info:#2563eb; --infobg:#eaf0fe; --violet:#7c3aed; --violetbg:#f1ebfe;
+  --shadow:0 1px 2px rgba(16,24,40,.04);
+  --shadow2:0 16px 48px rgba(16,24,40,.16);
+  --r:10px; --r2:8px;
+  --font:Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,Consolas,monospace;
+  --topbar:52px;
+  color-scheme:light;
+}
+:root[data-theme="dark"]{
+  --bg:#0c0c0e; --bg2:#151518; --panel:#111113; --panel2:#18181b; --line:#232327; --line2:#2f2f35;
+  --text:#ececef; --muted:#a3a3ad; --faint:#70707a;
+  --accent:#f59e0b; --accent2:#fbbf24; --accentbg:#271c08; --teal:#2ec4ad; --tealbg:#0f2a26;
+  --ok:#4ade80; --okbg:#0f2617; --warn:#fbbf24; --warnbg:#2a1f08; --bad:#fb7c5c; --badbg:#2e140c;
+  --info:#7aa2ff; --infobg:#111f3d; --violet:#b39bff; --violetbg:#22183d;
+  --shadow:0 1px 2px rgba(0,0,0,.4);
+  --shadow2:0 20px 60px rgba(0,0,0,.6);
+  color-scheme:dark;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:#0c0c0e; --bg2:#151518; --panel:#111113; --panel2:#18181b; --line:#232327; --line2:#2f2f35;
+    --text:#ececef; --muted:#a3a3ad; --faint:#70707a;
+    --accent:#f59e0b; --accent2:#fbbf24; --accentbg:#271c08; --teal:#2ec4ad; --tealbg:#0f2a26;
+    --ok:#4ade80; --okbg:#0f2617; --warn:#fbbf24; --warnbg:#2a1f08; --bad:#fb7c5c; --badbg:#2e140c;
+    --info:#7aa2ff; --infobg:#111f3d; --violet:#b39bff; --violetbg:#22183d;
+    --shadow:0 1px 2px rgba(0,0,0,.4);
+    --shadow2:0 20px 60px rgba(0,0,0,.6);
+    color-scheme:dark;
+  }
+}

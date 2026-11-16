@@ -1,0 +1,18 @@
+services:
+  cnc-frezka:
+    build: .
+    image: diy-cnc-frezka
+    container_name: cnc-frezka
+    restart: unless-stopped
+    ports:
+      - "${PORT:-8090}:8090"
+    environment:
+      CNC_PASSWORD: ${CNC_PASSWORD:?Nastav CNC_PASSWORD v souboru .env}
+      CNC_VIEWER_PASSWORD: ${CNC_VIEWER_PASSWORD:-}
+      TZ: Europe/Prague
+      # za reverzní proxy (Cloudflare tunel, nginx): přidej --trust-proxy do command
+    volumes:
+      - cnc-data:/data
+
+volumes:
+  cnc-data:
