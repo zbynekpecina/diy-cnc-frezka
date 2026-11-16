@@ -1493,19 +1493,19 @@ const V3 = (() => {
     for (const s of [-1, 1]) cable(Eg, [[s * half, xSwY - 12, frontZ - 6], [s * pI, xSwY - 12, frontZ - 4], [s * pI, bY, beamZ], [-pI, bY, beamZ], [-pI, c.conTop + 30, beamZ], [-pI, c.conTop + 30, frontZ - 3], [-(half + ps / 2 + 3), c.conTop + 30, frontZ - 3], [-half - 14, yEnd[1] - 10, 20], yE2], WR, s > 0 ? wY : wG, 7);
     for (const xx of [-half + 60, 0, half - 120]) tie(Eg, xx, bY, beamZ - 10, "x", 4);
     // ===== vysavač + hadice =====
-    // držák hadice: jekl 20×20 přišroubovaný zezadu na horní příčník, nahoře rameno dopředu nad vřeteno, na konci oko
-    const hTopY = c.topBeamY + 470, hBackZ = beamZ + bsz / 2 + 32, hArmZ = frontZ - 190, hX = 0;
+    // šibenice hadice: svislý jekl 20×20 odsazený za příčníky dvěma přivařenými jekly 20×20 délky 40 mm
+    // (k hornímu i dolnímu příčníku), nahoře rameno dopředu nad vřeteno, na konci oko
+    const hTopY = c.topBeamY + 470, stub = 40, hBackZ = beamZ + bsz / 2 + stub + 10, hArmZ = frontZ - 190, hX = 0;
     const hg = grp(Eg, 0, 0, 0);
-    B(20, 50, 22, MAT.aluD, hX, c.topBeamY, beamZ + bsz / 2 + 11, hg);                   // distanční hranol za řetězem osy X
-    B(20, hTopY - (c.topBeamY - bsz / 2), 20, MAT.frame, hX, (hTopY + c.topBeamY - bsz / 2) / 2, hBackZ, hg);
-    for (const yy of [c.topBeamY - 10, c.topBeamY + 10]) Cy(4, 3, MAT.steel, hX, yy, hBackZ + 11.5, "z", hg, 6);
+    for (const by of [c.topBeamY, c.lowBeamY]) B(20, 20, stub, MAT.frame, hX, by, beamZ + bsz / 2 + stub / 2, hg);   // přivařené odsazení 40 mm
+    B(20, hTopY - (c.lowBeamY - 10), 20, MAT.frame, hX, (hTopY + c.lowBeamY - 10) / 2, hBackZ, hg);
     B(20, 20, hBackZ - hArmZ + 10, MAT.frame, hX, hTopY + 10, (hBackZ + hArmZ) / 2, hg);
     tubeBetween(hg, [hX, hTopY - 120, hBackZ], [hX, hTopY, hBackZ - 120], 15, MAT.frame);
     const ring = new THREE.Mesh(new THREE.TorusGeometry(mm(26), mm(3), 8, 24), MAT.steel); ring.rotation.x = Math.PI / 2; ring.position.set(mm(hX), mm(hTopY - 6), mm(hArmZ + 10)); hg.add(ring);
     const hRing = new THREE.Object3D(); hRing.position.set(mm(hX), mm(hTopY - 6), mm(hArmZ + 10)); hg.add(hRing);
     const hBack = new THREE.Object3D(); hBack.position.set(mm(hX), mm(hTopY + 26), mm(hBackZ)); hg.add(hBack);
     for (let k = 1; k <= 3; k++) tie(hg, hX, hTopY + 31, hBackZ - k * (hBackZ - hArmZ) / 4, "z", 24);
-    lab(hg, hX, hTopY + 60, hBackZ, "Hose holder", "20×20 tube centred on top beam, eyelet above spindle", 7);
+    lab(hg, hX, hTopY + 60, hBackZ, "Hose holder (gallows)", "20×20 tube welded to both cross tubes via 40 mm stand-offs, eyelet above spindle", 7);
     // vysavač na zemi vedle stolu (strana −X, u konce +Z)
     const vX = -(tW / 2 - 260), vZ = tL / 2 - 330, vg = grp(Ev, vX, 0, vZ), vR = 175, vH = 420;   // pod stolem u konce +Z
     const vYel = new THREE.MeshStandardMaterial({color: 0xd9a21b, roughness: .55}), vGr = new THREE.MeshStandardMaterial({color: 0x30343a, roughness: .7});
@@ -1540,7 +1540,7 @@ const V3 = (() => {
       const P = toR(S_hosePort), R = toR(hRing), Bk = toR(hBack), dx = P[0] - R[0];
       setHose(hoseA, [P, [P[0], P[1] + 70, P[2]], [P[0] * .7 + R[0] * .3, P[1] + (R[1] - P[1]) * .55, P[2] - 25], [R[0] + dx * .15, R[1] - 70, R[2]], R, [R[0], R[1] + 34, R[2] + 30], [Bk[0], Bk[1], Bk[2] - 60], Bk], 20);
       // ze šibenice dozadu a na stranu −X (dál od obsluhy), vně hrany stolu dolů a plynule pod stůl k vysavači
-      const gz = Bk[2], ex = -(tW / 2 + 70), zm = (gz + vIn[2]) / 2;
+      const gz = Bk[2], ex = -(tW / 2 + 120), zm = (gz + vIn[2]) / 2;             // ex: vně dlouhé hrany stolu na straně vysavače
       setHose(hoseB, [Bk, [Bk[0], Bk[1] + 30, Bk[2] + 90], [Bk[0] - 200, Bk[1] - 20, gz + 170], [ex + 60, Bk[1] - 220, gz + 150], [ex, tTop + 160, zm + 40], [ex - 10, tTop - 60, zm + 60],
         [ex - 20, legH - 160, (zm + vIn[2]) / 2], [ex - 10, vIn[1] + 110, vIn[2] - 10], [vIn[0] - 70, vIn[1] + 8, vIn[2]], vIn], 20);
     });
