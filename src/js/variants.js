@@ -16,8 +16,8 @@ const KAT = {
   spodni: {n: "Spodní konstrukce (rám, nohy)", c: "#8d9aa8", have: 1},
   stul: {n: "Stůl a obětní deska", c: "#b79b74", have: 1},
 };
-const BOM_MODES = {all: "Vše", need: "Co nám chybí", ess: "Nejnutnější"};
-const inMode = (l, mode) => mode === "all" ? true : mode === "need" ? !KAT[l.k].have : !!KAT[l.k].ess;
+const BOM_MODES = {all: "Vše", need: "Co nám chybí", ess: "Nejnutnější", bought: "Už koupeno"};
+const inMode = (l, mode) => mode === "all" ? true : mode === "bought" ? !!l.bought : mode === "need" ? !KAT[l.k].have && !l.bought : !!KAT[l.k].ess && !l.bought;   // need / ess = co ještě zbývá koupit (bez už koupeného)
 const ZAXIS = [
   {k: "osaZ", n: "HGR20 400 mm sada (2 kolejnice + 4 vozíky) – osa Z", q: 1, p: 1150, ref: "1005004693727609", est: 1, note: "CNCWZCS, délka 400 mm"},
   {k: "osaZ", n: "Sada SFU1605 + BK12/BF12 + DSG16H + spojka 8×10", q: 1, p: 1354, ref: "1005012910583003", note: "HLTNC PL – délka 300–500 mm"},

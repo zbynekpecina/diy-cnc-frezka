@@ -22,7 +22,7 @@ let closingByRoute = false;
 window.addEventListener("hashchange", route);
 document.addEventListener("click", e => {
   const g = e.target.closest("[data-go]"); if (g) { go(g.dataset.go); }
-  const tb = e.target.closest(".tab"); if (tb) { if (tb.dataset.v3 && !VBY[S.variant]) { S.variant = "nas2"; save(); } go(tb.dataset.v3 ? "varianta/" + S.variant : tb.dataset.tab); }
+  const tb = e.target.closest(".tab"); if (tb) { if (tb.dataset.v3 && !VBY[S.variant]) { S.variant = "nas4"; save(); } go(tb.dataset.v3 ? "varianta/" + S.variant : tb.dataset.tab); }
 });
 
 /* =====================================================================

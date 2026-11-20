@@ -15,7 +15,7 @@ Dokumentace stavby levné portálové CNC frézky na dřevo. Obsahuje návrh str
 
 | Stránka | Obsah |
 |---|---|
-| [Custom1 a Custom2](navrh/nas-navrh.md) | aktuální návrh stroje, kontroly rozměrů, co chybí |
+| [Custom1 až Custom4](navrh/nas-navrh.md) | aktuální návrh stroje, kontroly rozměrů, co chybí |
 | [Rozhodnutí](navrh/rozhodnuti.md) | přehled rozhodnutí a jejich důvody |
 | [Koncept v2](navrh/koncept-v2.md) | první koncept velkého stroje a otevřené otázky |
 | [Prototyp v1](navrh/prototyp-v1.md) | původní ruční prototyp a proč nejezdí rovně |
@@ -33,6 +33,19 @@ Rešerše dílů jsou v sekci **Díly a technologie**. Konkrétní nabídky s ce
 | `dily/<kategorie>/katalog.md` | rešerše dané kategorie |
 | `dily/<kategorie>/kandidati.md` | konkrétní nabídky (zdroj záložky Produkty) |
 | `dily/<kategorie>/obrazky/` | náhledy produktů |
+
+## Co do dokumentace patří
+
+Dokumentace je veřejná: je v repozitáři i na webu. Obsahuje jen technické informace o stroji – návrh, rozměry, rozhodnutí, rešerše dílů a ceny z veřejných nabídek.
+
+Nepatří sem:
+
+- pracovní poznámky, úkoly a soukromá komunikace (ty zůstávají mimo repozitář),
+- jména a kontakty osob, adresy, údaje o objednávkách,
+- údaje o síti a serverech, hesla a klíče,
+- snímky obrazovky s osobními údaji a fotografie s metadaty (EXIF, GPS).
+
+Obrázky se ukládají zmenšené (do 1,5 MB) a bez metadat.
 
 ## Jak přidat produkt
 

@@ -23,11 +23,12 @@ function renderVarianty() {
         <div class="sep"></div>
         <select id="bView" title="Pohled kamery"><option value="iso">celkový pohled</option><option value="front">zepředu</option><option value="side">z boku</option><option value="top">shora</option><option value="dZ">detail: osa Z</option><option value="dX">detail: vozík X</option><option value="dY">detail: vozíky Y</option><option value="dEl">detail: elektronika</option><option value="dDisp">detail: displej</option></select>
         <div style="flex:1"></div>
-        <button id="bLab" title="Popisky dílů">🏷<span class="t"> Popisky</span></button><button id="bDim" title="Kóty a rozměry">📏<span class="t"> Kóty</span></button><button id="bExp" title="Rozložit všechny sestavy">🧩<span class="t"> Rozložit</span></button><button id="bCol" title="Složit vše zpět do sebe">📦<span class="t"> Složit vše</span></button><button id="bHud" class="on" title="Info panely (souřadnice) zobrazit / skrýt">ⓘ<span class="t"> Info</span></button><button id="bSnd" class="on" title="Zvuk frézování">🔊<span class="t"> Zvuk</span></button><button id="bFs" title="Celá obrazovka">⛶</button>
+        <button id="bLab" title="Popisky dílů">🏷<span class="t"> Popisky</span></button><button id="bDim" class="on" title="Kóty a rozměry">📏<span class="t"> Kóty</span></button><button id="bExp" title="Rozložit všechny sestavy">🧩<span class="t"> Rozložit</span></button><button id="bCol" title="Složit vše zpět do sebe">📦<span class="t"> Složit vše</span></button><button id="bHud" class="on" title="Info panely (souřadnice) zobrazit / skrýt">ⓘ<span class="t"> Info</span></button><button id="bSnd" title="Zvuk frézování">🔇<span class="t"> Zvuk</span></button><button id="bFs" title="Celá obrazovka">⛶</button>
       </div>
     </div>
     <div class="vhint"><span class="desk">Levé tlačítko otáčí, pravé posouvá, kolečko přibližuje. Pravým kliknutím na díl se sestava rozloží, kliknutím na žlutou kótu se mění rozměr.</span><span class="mob">Tažením otáčíte, dvěma prsty přibližujete a posouváte.</span></div>
     <div class="vbar" id="vbar"></div>
+    <details class="panel ptable" id="schwrap" open><summary>📐 Schémata s kótami – nárys, bokorys, půdorys (hodnoty jdou upravit přímo)</summary><div id="schema" class="schema"></div></details>
     <details class="panel ptable" id="ptwrap" open><summary>📐 Rozměry a parametry</summary><div id="ptable"></div></details>
     <details class="panel ptable" id="dwwrap"><summary>📏 Výrobní výkresy a řezný plán</summary><div id="dwg"></div></details>`;
     V3.init($("#viewer"));
@@ -63,13 +64,13 @@ function renderVarianty() {
     else go();
   }
   $("#hudt").textContent = v.short; $("#hudarea").textContent = `obrobek ${v.area[1]} × ${v.area[0]} mm`;
-  renderVbar(v); renderPtable(v); renderDwg(v); updateStepLabel(v);
+  renderVbar(v); renderPtable(v); renderDwg(v); renderSchema(v); updateStepLabel(v);
 }
 function renderDwg(v) {
   const on = v.p3.style === "nas"; $("#dwwrap").classList.toggle("hidden", !on);
   if (on) $("#dwg").innerHTML = renderDrawings(v);
 }
-function rebuild3d() { const v = VBY[S.variant]; V3.build(v, true); renderVbar(v); renderPtable(v); renderDwg(v); renderVlist(); $("#hudarea").textContent = `obrobek ${v.area[1]} × ${v.area[0]} mm`; }
+function rebuild3d() { const v = VBY[S.variant]; V3.build(v, true); renderVbar(v); renderPtable(v); renderDwg(v); renderSchema(v); renderVlist(); $("#hudarea").textContent = `obrobek ${v.area[1]} × ${v.area[0]} mm`; }
 let introDone = false;
 function startAsm(ms, done) {                          // postaví stroj krok za krokem (1 → 8)
   let n = 1; stepTo(1, true); $("#bAsm").textContent = "■";
@@ -79,7 +80,7 @@ function stopAsm() { clearInterval(asmTimer); asmTimer = null; const b = $("#bAs
 function stepTo(n, instant) { V3.setStep(n, instant); $("#bStep").value = n; updateStepLabel(VBY[S.variant]); }
 function updateStepLabel(v) {
   const n = V3.state.step, s = v.steps[n - 1];
-  $("#steplabel").innerHTML = n >= 8 ? (V3.state.play ? (V3.state.prog !== "flat" && V3.state.seg < (V3.state.textEnd || 0) ? `<b>Engraving</b>text with Ø39 cutter` : `<b>Milling</b>surfacing with Ø39 cutter`) : `<b>Paused</b>`) : `<b>Step ${n} / 8</b>${esc(s[2] || s[0])}`;
+  $("#steplabel").innerHTML = n >= 8 ? (V3.state.play ? (V3.state.prog !== "flat" && V3.state.seg >= (V3.state.textStart ?? Infinity) ? `<b>Engraving</b>text with Ø39 cutter` : `<b>Milling</b>surfacing with Ø39 cutter`) : `<b>Paused</b>`) : `<b>Step ${n} / 8</b>${esc(s[2] || s[0])}`;
 }
 function renderVlist() {
   $("#vlist").innerHTML = VARIANTS.map(v => vcardHTML(v, v.id === S.variant)).join("");
@@ -87,7 +88,7 @@ function renderVlist() {
 }
 function renderVbar(v) {
   $("#vbar").innerHTML = `<div class="vbar-l"><b>${esc(v.name)}</b><span class="muted">${v.tags.map(esc).join(" · ")}</span></div>
-    <div class="vbar-p"><span>Nejnutnější<b>${kc(bomTotal(v, "ess"))}</b></span><span>Chybí celkem<b>${kc(bomTotal(v, "need"))}</b></span></div>
+    <div class="vbar-p"><span>Nejnutnější<b>${kc(bomTotal(v, "ess"))}</b></span><span>Zbývá koupit<b>${kc(bomTotal(v, "need"))}</b></span><span>Celkem vč. koupeného<b>${kc(bomTotal(v, "all"))}</b></span></div>
     <div class="vbar-b"><button class="btn sm" data-pop="desc">ℹ Popis</button><button class="btn sm" data-pop="steps">🛠 Postup stavby</button><button class="btn sm" data-pop="cmp">⚖ Srovnání</button><button class="btn sm primary" data-pop="kalk">🧮 Kalkulace</button></div>`;
   $$("#vbar [data-pop]").forEach(b => b.onclick = () => ({desc: popDesc, steps: popSteps, cmp: popCmp, kalk: () => { S.navTab = v.id; save(); go("navrh"); }})[b.dataset.pop](v));
 }
@@ -111,7 +112,7 @@ function popCmp() {
   popup("Srovnání variant", `<div class="tablewrap"><table class="table cmp"><thead><tr><th></th>${VARIANTS.map(v => `<th style="color:${v.color}">${esc(v.short)}</th>`).join("")}</tr></thead><tbody>${rows.map(r => `<tr><td><b>${r[0]}</b></td>${VARIANTS.map(v => `<td>${r[1](v)}</td>`).join("")}</tr>`).join("")}</tbody></table></div>`);
 }
 function renderPtable(v) {
-  const p = getParams(v), groups = (PARAM_INFO[v.p3.style === "nas" ? "nas" : "gen"]).map(([g, rows]) => [g, rows.filter(([k]) => !(p.flat && k === "rodGap"))]);
+  const p = getParams(v), groups = (PARAM_INFO[v.p3.style === "nas" ? "nas" : "gen"]).map(([g, rows]) => [g, rows.filter(([k]) => !(p.flat && k === "rodGap") && (p.alu || !["bridgeOff", "hoseH", "hoseArm", "boltGap", "bridgeFront", "bridgeRear", "postE"].includes(k))).map(([k, l]) => [k, p.alu ? l.replace("jeklů", "profilů").replace("jeklu", "profilu").replace(/^(Jekl)/, "Profil") : l])]);
   const checks = v.p3.style === "nas" ? nasChecks(p) : [];
   $("#ptable").innerHTML = `
   ${checks.length ? `<div class="checks">${checks.map(c => `<div class="chk ${c.ok ? "ok" : "warn"}"><b>${esc(c.t)}</b><span>${esc(c.v)}</span>${c.hint ? `<small>${esc(c.hint)}</small>` : ""}</div>`).join("")}</div>` : ""}

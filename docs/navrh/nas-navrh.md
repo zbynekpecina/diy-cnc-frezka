@@ -1,4 +1,4 @@
-# Custom1 a Custom2
+# Custom1 až Custom4
 
 Portálová frézka ze svařených jeklů 25×25 postavená na stávajícím stole. Cílem je co nejlevnější stroj na srovnávání a frézování dřeva. Parametrický 3D model s kótami, kontrolami a kusovníkem je v záložce **3D model**.
 
@@ -65,6 +65,50 @@ Návrh má dvě varianty spodní části. Portál, osa X, osa Z, vřeteno a elek
 | Šířka frézování | 719 mm | 679 mm |
 
 Custom1 vznikl kvůli opoře kolejnic: podpěra SBR20 je široká 45 mm a jediný profil jen 40 mm. Na spodní konstrukci zůstává podkladová deska, na kterou se klade obrobek. Popis konstrukce výše odpovídá variantě Custom2, u Custom1 platí změny z tabulky.
+
+## Custom3 – portál z hliníkových profilů
+
+Custom3 má stejnou spodní konstrukci a kolejnice jako Custom1. Mění se portál: místo svařených jeklů 25×25 je z hliníkových drážkových profilů typu 3D tiskárny a skládá se šrouby, bez svařování. V kalkulaci je jen to, co je od vozíků osy Y nahoru (spodní konstrukce, kolejnice s vozíky a modul Z už jsou k dispozici).
+
+**Uspořádání**
+- **Spojka vozíků:** na každé straně leží na dvou vozících osy Y profil 30×60 dlouhý 244 mm, naležato, posunutý o 2 mm ven od osy kolejnice (přesah 8 mm). Díry vozíků (35×35) musí být od hrany profilu aspoň 10 mm.
+- **Stojky:** na obou koncích spojky stojí svislý profil 30×30 (A vzadu, B vpředu, 4 kusy celkem), vozíky jsou uvnitř mezi nimi a každá stojka je 4,5 mm za hlavou šroubu vozíku. Spoj tvoří plochá deska 40×70 se čtyřmi šrouby na vnější ploše. Spojka končí v rovině s vnějším čelem stojek, úhelník do drážky by potřeboval přesah aspoň 22 mm.
+- **Boční rám:** boční profil 30×30 leží na horních koncích stojek A a B a spolu se spojkou tvoří uzavřený rám, rohy jsou vyztužené deskami 4 mm.
+- **Osa X:** zadní U nese kolejnice X na dvou příčnících 30×30, 150 mm nad sebou. Kolejnice SBR20 je širší než profil, proto se šroubuje přímo na profil jen jednou řadou děr do drážky (profil je o 15 mm pod osou kolejnice). Pásovina pod kolejnice není potřeba. Přední příčník 30×30 je o 120 mm výš, aby vřeteno v horní poloze Z prošlo pod ním.
+- **Držák hadice:** šibenice odpadla. Hadici drží svislý profil 30×30 (400 mm) na zadní stojce na straně vysavače s ramenem 130 mm dovnitř portálu a okem. Hadice vede vnitřkem portálu.
+
+**Rozměry a pracovní plocha**
+- Rozteč vozíků Y je 130 mm (u Custom1 200 mm). Pojezd Y je tedy 1 620 mm místo 1 550 mm, pracovní plocha je o 70 mm delší. Rozteč je daná tím, že obě stojky stojí na koncích spojky 300 mm a vozíky jsou mezi nimi.
+- Šířka frézování je 711 mm, protože vřetenová hubice musí projet mezi spojkami vozíků.
+- Rozteč stojek A a B je 214 mm (osy), boční profil mezi nimi má 184 mm.
+
+**Tuhost (odhad rámovým výpočtem, síla 100 N na nástroji)**
+- Posun nástroje při 100 N je asi 0,15 mm ve směru X a 0,06 mm ve směru Y. Výpočet bere profil 3030 jako Ix ≈ 4 cm⁴, E = 70 GPa, rohové desky jako pružné spoje a kolejnici SBR20 jako polovinu přidané tuhosti příčníku (šroubování z jedné strany).
+- Hlavní podíl ve směru X (0,13 mm) má natáčení desky vozíku X pod kolejnicemi, ne ohyb stojek.
+- Výsledek nezávisí na rozteči vozíků, zatížení vozíků SBR20UU je při tom zanedbatelné (jednotky až desítky N proti 882 N).
+- Je to odhad. Skutečnou tuhost zjistí jen zkouška na hotovém stroji (úchylkoměr při zatížení).
+
+**Ověřit před nákupem**
+- Skutečný moment setrvačnosti profilů 3030 a 3060 u konkrétního výrobce a rozteč děr na vozících SBR20UU (35×35 je z popisu prodejce).
+- Ceny profilů v kusovníku jsou odhad.
+
+| | Custom3 | Custom1 |
+|---|---|---|
+| Portál | Al drážkové profily, šroubovaný | jekly 25×25, svařený |
+| Rozteč vozíků Y | 130 mm | 200 mm |
+| Pojezd Y | 1 620 mm | 1 550 mm |
+| Spojka vozíků | profil 30×60, 244 mm | pásovina 50×6 + jekl 25×25 |
+| Stojky | 4 ks, 494 mm | 2 ks, 370 mm |
+| Příčníky | 3× 3030, kolejnice přímo na profilu | 2× jekl 25×25 + pásovina 50×6 |
+
+## Custom4 – Custom1 s ocelovým plechem pod vřetenem
+
+Custom4 je portál ze svařených jeklů 25×25 jako Custom1. Liší se uchycením vřetena: vozík modulu Z má díry 60×30 (M5), patka vřetena 95×35 (M6), takže vřeteno se na vozík přímo nevejde.
+
+- **Plech:** ocel 200 × 100 × 5 mm, na líc vozíku čtyřmi zápustnými šrouby M5×10. Střed plechu je 20 mm pod středem vozíku, díry pro vřeteno jsou 95 × 35 mm.
+- **Bočnice:** dvě pásoviny 5 × 50 × 32 mm přivařené k zadní straně plechu, přišroubované do bočních závitů M4 vozíku (M4×10). Plech tak drží ze tří stran.
+- **Šrouby:** M5×15 (modul Z na plexi), M6×15 (vozíky Y na pásovinu), M6×20 (vozíky X na plexi), M5×10 zápustné, M4×10.
+- **Pozor:** závit M6 v plechu 5 mm je krátký – lépe matice zezadu nebo plech 6–8 mm. Po svaření plech zrovnat.
 
 ## Pohony a elektronika
 

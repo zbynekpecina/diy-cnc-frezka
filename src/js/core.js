@@ -11,7 +11,7 @@ const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
 const md = s => (window.marked ? marked.parse(s, {mangle: false, headerIds: false}) : "<pre>" + esc(s) + "</pre>");
 
 const STORE = "cncfrezka.state.v1";
-const defState = () => ({theme: null, sel: {}, custom: [], budget: 40000, bom: {}, steps: {}, q: {}, notes: "", variant: "nas2", bomMode: "need", navTab: "nas2", bomV: 3, params: {}, designs: [], rates: {eur: 25, usd: 23}, kwh: 6});
+const defState = () => ({theme: null, sel: {}, custom: [], budget: 40000, bom: {}, steps: {}, q: {}, notes: "", variant: "nas4", bomMode: "all", navTab: "nas4", bomV: 3, params: {}, designs: [], rates: {eur: 25, usd: 23}, kwh: 6});
 let S;
 try { S = Object.assign(defState(), JSON.parse(localStorage.getItem(STORE) || "{}")); } catch (e) { S = defState(); }
 /* --- synchronizace se serverem (když běží přes tools/server.py) --- */
@@ -84,7 +84,12 @@ async function poll() {
 }
 function migrate() {
   if (S.bomV !== 3) { S.bom = {}; S.bomV = 3; }
-  if (!S.v5) { S.variant = "nas2"; S.navTab = "nas2"; S.v5 = 1; }      // výchozí návrh je Custom1
+  if (!S.v5) { S.variant = "nas2"; S.navTab = "nas2"; S.v5 = 1; }      // Custom1
+  if (!S.v6) { S.variant = "nas3"; S.navTab = "nas3"; S.v6 = 1; }
+  if (!S.v10) { S.variant = "nas4"; S.navTab = "nas4"; S.v10 = 1; }      // výchozí (první) varianta je Custom4 – jeklový portál s ocelovým plechem pod vřetenem
+  if (!S.v9) { if (S.bom) delete S.bom.nas3; S.v9 = 1; }      // seznam položek Custom3 se přeskládal (sady spojek, profily po 1 m), staré úpravy podle pořadí řádků by sedly na jiné položky
+  if (!S.v8) { if (S.params) delete S.params.nas3; S.v8 = 1; }      // význam parametrů Custom3 se změnil (přesah spojky, rozteč vozíků…): staré uložené hodnoty by přebíjely nové výchozí rozměry
+  if (!S.v7) { S.bomMode = "all"; if (S.bom) delete S.bom.nas3; S.v7 = 1; }      // kalkulace ukazuje všechny řádky (koupené označené); staré úpravy Custom3 se po přeskládání řádků zahodí      // výchozí (první) varianta je Custom3 – Al portál
   S.params = S.params || {}; S.designs = S.designs || [];
 }
 migrate();

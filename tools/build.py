@@ -33,7 +33,7 @@ THUMBS = WEB / "thumbs"
 IMG_EXT = (".png", ".jpg", ".jpeg", ".webp", ".gif")
 
 CSS = ["tokens", "base", "layout", "components", "wiki", "products", "viewer", "costing", "wiring", "calculators", "responsive"]
-JS = ["core", "variants", "design", "drawings", "app", "wiki", "products", "viewer3d", "model", "bom", "costing", "wiring",
+JS = ["core", "variants", "partimg", "design", "drawings", "schema", "app", "wiki", "products", "viewer3d", "model", "bom", "costing", "wiring",
       "calculators", "settings", "main"]
 VENDOR = ["three.min.js", "OrbitControls.js", "marked.min.js"]
 
@@ -54,7 +54,7 @@ CATS = {
 WIKI = [
     ("Projekt", [
         ("README.md", "🏠", "Přehled"),
-        ("navrh/nas-navrh.md", "⭐", "Custom1 a Custom2"),
+        ("navrh/nas-navrh.md", "⭐", "Custom1 až Custom4"),
         ("navrh/rozhodnuti.md", "🧭", "Rozhodnutí"),
         ("navrh/koncept-v2.md", "📐", "Koncept v2"),
         ("navrh/prototyp-v1.md", "🛠️", "Prototyp v1"),

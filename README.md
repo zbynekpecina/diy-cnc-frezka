@@ -46,7 +46,7 @@ Celá aplikace je **jeden HTML soubor bez frameworku**. Funguje offline, na mobi
 - kusovník s cenami, odkazy do obchodů a náhledy dílů
 - **výrobní výkresy a řezný plán** – délky jeklů a pásovin, úhel vzpěry, díry v plexiskle, adaptéru a pásovinách
 - **pracovní oblast** vyznačená laserem podle skutečného dosahu nástroje
-- varianty Custom1 a Custom2 a pět dalších konceptů pro srovnání
+- varianty Custom1 až Custom4 (jeklový portál, portál z Al profilů, vřeteno na ocelovém plechu) a pět dalších konceptů pro srovnání
 
 </td>
 </tr>
