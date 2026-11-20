@@ -1,6 +1,6 @@
 # Lineární vedení – kandidáti, které jsme sami našli
 
-## ✅ OBJEDNÁNO 15. 11. 2026: VEVOR SBR20, 2× 1800 mm + 4 vozíky SBR20UU (Allegro) – osa Y
+## ✅ KOUPENO: VEVOR SBR20, 2× 1800 mm + 4 vozíky SBR20UU (Allegro) – osa Y
 
 - **Rozměr 1800 × 90 × 36,3 mm ověřen** = obě kolejnice vedle sebe (2 × podpěra 45 mm), výška 36,3 ≈ vrchol tyče (osa 27 + poloměr 10) → standardní SBR20, 3D model sedí
 

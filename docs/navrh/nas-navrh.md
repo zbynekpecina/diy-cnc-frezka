@@ -25,7 +25,7 @@ Podkladová deska má díry Ø25 v rastru 100 mm napříč a 200 mm podél. Obro
 
 ### Osa Y
 
-- Kolejnice SBR20 2× 1 800 mm (VEVOR) se čtyřmi vozíky SBR20UU, objednáno 15. 11. 2026.
+- Kolejnice SBR20 2× 1 800 mm (VEVOR) se čtyřmi vozíky SBR20UU, koupeno.
 - Na každé straně dva vozíky s roztečí 200 mm. Spojuje je pásovina 50×6 a jekl 25×25.
 - Na zadní vozík je přivařená stojka z jeklu 25×25 (výchozí délka 285 mm). Vzpěra vede od předního vozíku na stejné straně jako vřeteno, takže portál dojede dál na oba konce.
 
@@ -47,7 +47,7 @@ Podkladová deska má díry Ø25 v rastru 100 mm napříč a 200 mm podél. Obro
 
 ### Vřeteno a měnič
 
-- HLTNC 2,2 kW GDZ80x73 ER20, 24 000 ot/min, chlazení vzduchem, s měničem EV210 (1F 230 V, RS485). Objednáno 15. 11. 2026 za 4 053 Kč.
+- HLTNC 2,2 kW GDZ80x73 ER20, 24 000 ot/min, chlazení vzduchem, s měničem EV210 (1F 230 V, RS485). Koupeno za 4 053 Kč.
 - Kleštiny ani klíč ER20 nejsou v sadě. Dokoupit kleštinu 8 mm (srovnávací fréza Ø39 už je koupená) a klíč ER20A.
 
 ## Custom1 a Custom2

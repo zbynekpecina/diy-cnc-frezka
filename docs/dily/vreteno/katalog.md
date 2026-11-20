@@ -2,7 +2,7 @@
 
 Srovnání vřeten podle chlazení a výkonu, konkrétní nabídky, podpora měničů ve FluidNC a požadavky na elektroinstalaci. Rešerše z 15. 11. 2026. Kandidáti, které jsme našli sami: [kandidati.md](kandidati.md) · koupená fréza: [nastroje-frezy.md](../prislusenstvi/nastroje-frezy.md).
 
-> **Aktuální stav:** Objednáno 15. 11. 2026 za 4 053 Kč: vřeteno HLTNC 2,2 kW GDZ80x73 ER20 (vzduchem chlazené) + měnič EV210 s RS485 (Modbus). Záloha: EUCNC 2,2 kW. Měnič se řídí svorkami: otáčky 0–10 V přes převodník z PWM, start relé na X1, chyba TA/TC přes optočlen do FluidNC. Modbus master na RS485 je 7" displej ESP32-P4 s vlastním firmwarem.
+> **Aktuální stav:** Koupeno za 4 053 Kč: vřeteno HLTNC 2,2 kW GDZ80x73 ER20 (vzduchem chlazené) + měnič EV210 s RS485 (Modbus). Záloha: EUCNC 2,2 kW. Měnič se řídí svorkami: otáčky 0–10 V přes převodník z PWM, start relé na X1, chyba TA/TC přes optočlen do FluidNC. Modbus master na RS485 je 7" displej ESP32-P4 s vlastním firmwarem.
 
 > **Pozor:** Koupená srovnávací fréza má stopku 8 mm → vřeteno musí mít kleštinu ER16 nebo ER20. Vřetena s ER11 (max. 7 mm) nevyhovují.
 

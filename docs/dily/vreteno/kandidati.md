@@ -1,6 +1,6 @@
 # Vřeteno a VFD – kandidáti, které jsme sami našli
 
-## ✅ OBJEDNÁNO 15. 11. 2026: HLTNC EU CNC (sklad Německo): vřeteno 2,2 kW GDZ80x73-2.2 ER20 + měnič EV210 s RS485 (AliExpress) – **vybraná sada „F“**
+## ✅ KOUPENO: HLTNC EU CNC (sklad Německo): vřeteno 2,2 kW GDZ80x73-2.2 ER20 + měnič EV210 s RS485 (AliExpress) – **vybraná sada „F“**
 
 - Odkaz: https://www.aliexpress.com/item/1005011656854811.html
 - Obrázky: [obrazky/hltnc-eu-de-2.2kw-ev210/](obrazky/hltnc-eu-de-2.2kw-ev210/) (01 = stránka nabídky; 02 = galerie: obsah sady, svorkovnice, parametry, schéma zapojení)

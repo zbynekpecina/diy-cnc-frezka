@@ -2,7 +2,7 @@
 
 Srovnání typů lineárního vedení, doporučené velikosti podle velikosti stroje a přehled cen. Rešerše z 15. 11. 2026. Kandidáti, které jsme našli sami: [kandidati.md](kandidati.md).
 
-> **Aktuální stav:** Osa Y: SBR20 2× 1800 mm (VEVOR, objednáno 15. 11. 2026). Osa X: SBR20 2× 1000 mm (SucceBuy). Vozíky SBR20UU. Osa Z je hotový modul 200 mm (viz [Hotová řešení](../hotova-reseni/katalog.md)).
+> **Aktuální stav:** Osa Y: SBR20 2× 1800 mm (VEVOR, koupeno). Osa X: SBR20 2× 1000 mm (SucceBuy). Vozíky SBR20UU. Osa Z je hotový modul 200 mm (viz [Hotová řešení](../hotova-reseni/katalog.md)).
 
 ## Srovnání typů
 

@@ -16,7 +16,7 @@ Koupené frézy, kandidáti na další nákup a požadavky nástrojů na vřeten
 | Téma | Poznámka |
 |---|---|
 | ⚠️ **Stopka 8 mm** | Kleština **ER11 ji neupne** (ER11 nejvýše 7 mm). Nutná **ER16 (do 10 mm) nebo ER20 (do 13 mm)**. Vřetena 0,8 kW a většina 1,5 kW / 65 mm mají ER11, proto nevyhovují. |
-| ✅ **Objednané vřeteno** | HLTNC 2,2 kW GDZ80x73 ER20 ([vřetena](../vreteno/kandidati.md)), objednáno 15. 11. 2026, frézu upne. Kleštiny ani klíč ER20A v sadě nejsou. Dokoupit **kleštinu ER20 8 mm** (nebo sadu ER20 3–13 mm, cca 300–600 Kč na AliExpressu, neověřeno). |
+| ✅ **Objednané vřeteno** | HLTNC 2,2 kW GDZ80x73 ER20 ([vřetena](../vreteno/kandidati.md)), koupeno, frézu upne. Kleštiny ani klíč ER20A v sadě nejsou. Dokoupit **kleštinu ER20 8 mm** (nebo sadu ER20 3–13 mm, cca 300–600 Kč na AliExpressu, neověřeno). |
 | ⚠️ **Otáčky** | Ø39 mm při 24 000 ot/min = obvodová rychlost cca 2900 m/min, což je zbytečně mnoho. Pro dřevo volit **cca 12 000–16 000 ot/min** (řezná rychlost cca 1500–2000 m/min). Vzduchem chlazené vřeteno v tomto pásmu chladí dostatečně, pod cca 8000 ot/min už ne. |
 | ⚠️ **Výkon** | Široká fréza potřebuje velký výkon. Horní frézka Parkside (cca 1200 W, uhlíkový motor) s ní zvládne jen malé úběry, vřeteno 2,2 kW lépe. Začít s hloubkou 0,5–1 mm a krokem (stepover) cca 60–70 % průměru. |
 | **Náhradní destičky** | Destičky jsou vyměnitelné. Rovnou koupit **náhradní sadu destiček** stejného typu. |
